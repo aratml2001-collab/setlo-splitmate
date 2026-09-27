@@ -171,3 +171,10 @@ Role is never fixed by who created the Bill — it's determined by who paid the 
 - **SweetAlert2** handles every confirmation, message and notification (no browser `confirm()`/`prompt()` boxes).
 - **Validation while typing** on every form (`assets/js/validate.js`), with the same rules enforced by the API (`includes/validate.php`). Passwords need 8+ characters with a letter and a number.
 - **Security:** sign-in is locked for 15 minutes after 5 wrong passwords per email and device. Pages send security headers (Content-Security-Policy, no framing, no MIME sniffing), and CDN scripts are pinned with integrity hashes. Sessions use strict mode, and the cookie is marked `Secure` on HTTPS.
+
+## Backups
+
+- **One click:** double-click `tools\backup.cmd` (MySQL must be running). It saves the database to `backups\setlo_<date>.sql` and commits any code changes to git. Apache blocks web access to `backups\`.
+- **Undo a mistake in the code:** `git status` shows what changed, `git restore <file>` puts a file back as of the last backup, and `git log` lists every backup.
+- **Restore the database:** `C:\xampp\mysql\bin\mysql -u root setlo < backups\setlo_<date>.sql`
+- Everything is still on one disk: copy the SplitMate folder, including `backups\`, to a USB drive or Google Drive now and then.
