@@ -40,6 +40,9 @@ $steps = [
      ) ENGINE=InnoDB',
     // Personal "Pay me" QR code per account
     'ALTER TABLE users ADD COLUMN IF NOT EXISTS pay_code CHAR(12) NULL UNIQUE AFTER google_sub',
+    // The Pay-me QR is generated client-side now (assets/js/ui.js qrSvg/qrPng); the old uploaded-QR
+    // column is unused dead weight — drop it if an earlier run of this script added it.
+    'ALTER TABLE users DROP COLUMN IF EXISTS payment_qr',
 ];
 foreach ($steps as $sql) {
     db()->exec($sql);

@@ -17,7 +17,6 @@ CREATE TABLE users (
   pay_code        CHAR(12) NULL UNIQUE,           -- personal "Pay me" QR code (pages/pay.php?u=…); NULL for guests
   payment_method  ENUM('GCash','Maya','Bank Transfer','Cash') NOT NULL DEFAULT 'GCash',
   payment_account VARCHAR(60) NULL,               -- e.g. GCash number / account name, shown to people who owe you
-  payment_qr      VARCHAR(255) NULL,              -- uploaded GCash/Maya QR image (uploads/qr)
   avatar_color    CHAR(7) NOT NULL DEFAULT '#0d9488',
   role            ENUM('user','admin','guest') NOT NULL DEFAULT 'user',  -- guest: name-only bill member, cannot sign in
   status          ENUM('active','suspended') NOT NULL DEFAULT 'active',
