@@ -111,7 +111,7 @@ Setlo.mount({
     qr() { return this.p ? Setlo.qrSvg(this.payUrl) : ''; },
   },
   async mounted() {
-    await Setlo.run(this, async () => { this.set((await api.get('profile.php')).profile); }, 'loading');
+    await Setlo.load(this, 'profile.php', null, (r) => { this.set(r.profile); });
   },
   methods: {
     validators() {

@@ -82,7 +82,7 @@ Setlo.mount({
   }),
   async mounted() { await this.load(); },
   methods: {
-    async load() { await Setlo.run(this, async () => { this.bills = (await api.get('admin.php', { view: 'bills', status: this.status })).bills; }, 'loading'); },
+    async load() { await Setlo.load(this, 'admin.php', { view: 'bills', status: this.status }, (r) => { this.bills = r.bills; }); },
     async open(b) {
       const r = await Setlo.run(this, () => api.get('admin.php', { view: 'bill', id: b.id }), 'busy');
       if (r) this.detail = r;

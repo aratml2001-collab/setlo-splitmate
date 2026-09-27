@@ -8,9 +8,9 @@ if (!$billId) {
     redirect('pages/bill-history.php');
 }
 $back = 'bill-history.php';
+$headExtra = ['assets/js/summary.js'];
 require __DIR__ . '/../partials/head.php';
 ?>
-<script src="<?= h(url('assets/js/summary.js')) ?>?v=<?= @filemtime(__DIR__ . '/../assets/js/summary.js') ?>"></script>
 <div id="app" class="device device-narrow" v-cloak>
 
   <div class="app-hero px-5 pb-5 pt-8">
@@ -89,7 +89,7 @@ Setlo.mount({
   data: () => ({ billId: <?= $billId ?>, me: <?= (int) $user['id'] ?>, loading: true, bill: null, d: { members: [], items: [], settlements: [], shares: {}, discount_by: {} } }),
   computed: { memberMap() { return Object.fromEntries(this.d.members.map((m) => [m.id, m])); } },
   async mounted() {
-    await Setlo.run(this, async () => { this.d = await api.get('bills.php', { id: this.billId }); this.bill = this.d.bill; }, 'loading');
+    await Setlo.load(this, 'bills.php', { id: this.billId }, (r) => { this.d = r; this.bill = r.bill; });
   },
   methods: {
     assignedLabel(it) {

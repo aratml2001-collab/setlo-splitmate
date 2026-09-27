@@ -147,7 +147,7 @@ Setlo.mount({
     paying: null, payRef: '', proofFile: null, proofPreview: null, viewer: null,
   }),
   computed: { list() { return this[this.tab]; } },
-  async mounted() { await Setlo.run(this, this.load, 'loading'); },
+  async mounted() { await Setlo.load(this, 'settlements.php', null, (r) => { this.owe = r.owe; this.owed = r.owed; }); },
   methods: {
     async load() {
       const r = await api.get('settlements.php');

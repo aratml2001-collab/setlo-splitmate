@@ -7,7 +7,7 @@ if (current_user()) {
 }
 $title = 'Log In';
 $bodyClass = 'landing-body';
-$headExtra = ['https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&display=swap', 'assets/js/google-auth.js'];
+$headExtra = ['assets/fonts/caveat-latin.woff2', 'assets/js/google-auth.js'];
 require __DIR__ . '/../partials/head.php';
 require __DIR__ . '/../partials/auth-landing-top.php';
 ?>

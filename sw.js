@@ -1,6 +1,6 @@
 // Setlo service worker: makes the app installable and keeps the shell usable on a flaky connection.
 // Money data (api/) is never cached — balances must always come from the server.
-const VERSION = 'setlo-v4';
+const VERSION = 'setlo-v5';
 const SHELL = [
   'offline.html',
   'assets/css/app.css',
@@ -10,6 +10,8 @@ const SHELL = [
   'assets/js/validate.js',
   'assets/icons/icon-192.png',
   'assets/setlo_logo.png',
+  'assets/fonts/jakarta-latin.woff2',
+  'assets/fonts/jakarta-latin-ext.woff2',
 ];
 
 self.addEventListener('install', (event) => {
@@ -55,8 +57,8 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Vue, QR library and fonts from the CDNs: cache after first use.
-  if (/cdn\.jsdelivr\.net|fonts\.(googleapis|gstatic)\.com/.test(url.host)) {
+  // Vue, SweetAlert and the QR library from the CDN: cache after first use.
+  if (/cdn\.jsdelivr\.net/.test(url.host)) {
     event.respondWith(
       caches.open(VERSION).then(async (cache) => {
         const cached = await cache.match(req);

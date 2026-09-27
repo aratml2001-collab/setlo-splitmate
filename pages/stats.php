@@ -116,7 +116,7 @@ Setlo.mount({
       return Math.round(((this.s.this_month - this.s.last_month) / this.s.last_month) * 100);
     },
   },
-  async mounted() { await Setlo.run(this, async () => { this.s = await api.get('stats.php'); }, 'loading'); },
+  async mounted() { await Setlo.load(this, 'stats.php', null, (r) => { this.s = r; }); },
   methods: {
     monthShort(k) { return new Date(k + '-01T00:00').toLocaleDateString('en-PH', { month: 'short' }); },
     monthLong(k) { return new Date(k + '-01T00:00').toLocaleDateString('en-PH', { month: 'long', year: 'numeric' }); },

@@ -46,7 +46,7 @@ require __DIR__ . '/../partials/admin-top.php';
 Setlo.mount({
   data: () => ({ loading: true, busy: false, items: [] }),
   async mounted() {
-    await Setlo.run(this, async () => { this.items = (await api.get('admin.php', { view: 'disputes' })).disputes; }, 'loading');
+    await Setlo.load(this, 'admin.php', { view: 'disputes' }, (r) => { this.items = r.disputes; });
   },
   methods: {
     async message(s) {

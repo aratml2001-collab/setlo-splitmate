@@ -57,7 +57,7 @@ Setlo.mount({
     },
   },
   async mounted() {
-    await Setlo.run(this, async () => { this.bills = (await api.get('bills.php', { scope: 'history' })).bills; }, 'loading');
+    await Setlo.load(this, 'bills.php', { scope: 'history' }, (r) => { this.bills = r.bills; });
   },
 });
 </script>

@@ -117,7 +117,7 @@ Setlo.mount({
     creatorName() { return (this.memberMap[this.bill.creator_id] || {}).name; },
     unassignedCount() { return this.d.items.filter((it) => !it.who.length).length; },
   },
-  async mounted() { await Setlo.run(this, this.load, 'loading'); },
+  async mounted() { await Setlo.load(this, 'bills.php', { id: this.billId }, (r) => { this.d = r; this.bill = r.bill; }); },
   methods: {
     async load() {
       this.d = await api.get('bills.php', { id: this.billId });

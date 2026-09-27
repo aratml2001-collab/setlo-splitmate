@@ -11,7 +11,27 @@
     }
   }
 
+  // Last reply of each GET, kept for this tab only, so a refreshed page can show it at once
+  // while fresh data loads (see Setlo.load). Keyed by user; cleared on any change and when signed out.
+  const PREFIX = 'setlo:' + (meta('user-id') || '0') + ':';
+  const store = {
+    get(key) { try { return JSON.parse(sessionStorage.getItem(PREFIX + key)); } catch (e) { return null; } },
+    set(key, value) {
+      try { sessionStorage.setItem(PREFIX + key, JSON.stringify(value)); }
+      catch (e) { store.clear(); } // full or blocked: just skip saving
+    },
+    clear() {
+      try {
+        Object.keys(sessionStorage).filter((k) => k.startsWith('setlo:')).forEach((k) => sessionStorage.removeItem(k));
+      } catch (e) { /* storage blocked */ }
+    },
+  };
+  if (PREFIX === 'setlo:0:') store.clear(); // signed out (login pages): drop everything
+
+  const withQuery = (path, params) => path + (params ? '?' + new URLSearchParams(params).toString() : '');
+
   async function request(method, path, data) {
+    if (method !== 'GET') store.clear(); // something may change: never show old numbers again
     const opts = { method, headers: { Accept: 'application/json' }, credentials: 'same-origin' };
     if (method !== 'GET') {
       opts.headers['X-CSRF-Token'] = meta('csrf-token');
@@ -38,16 +58,16 @@
     if (!res.ok || !json.ok) {
       throw new ApiError(json.error || 'Request failed.', res.status, json);
     }
+    if (method === 'GET') store.set(path, json);
     return json;
   }
 
   global.api = {
     ApiError,
-    get: (path, params) => {
-      const qs = params ? '?' + new URLSearchParams(params).toString() : '';
-      return request('GET', path + qs);
-    },
+    get: (path, params) => request('GET', withQuery(path, params)),
     post: (path, data) => request('POST', path, data),
+    /** The last saved reply for this GET (this tab, this user), or null. */
+    peek: (path, params) => store.get(withQuery(path, params)),
     /** Update the CSRF token after login/register rotates the session. */
     setCsrf: (token) => {
       const el = document.querySelector('meta[name="csrf-token"]');

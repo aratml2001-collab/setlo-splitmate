@@ -156,7 +156,8 @@
   };
 
   const Spinner = {
-    template: `<div class="flex justify-center py-10"><span class="h-7 w-7 animate-spin rounded-full border-[3px] border-brand-200 border-t-brand-600"></span></div>`,
+    // Fades in after 300 ms, so a quick load never flashes a spinner
+    template: `<div class="spinner-delay flex justify-center py-10"><span class="h-7 w-7 animate-spin rounded-full border-[3px] border-brand-200 border-t-brand-600"></span></div>`,
   };
 
   const NOTIF_ICONS = {
@@ -328,5 +329,23 @@
     }
   }
 
-  global.Setlo = { mount, run, confirm: confirmDialog, alert: alertDialog, promptText, showCopy, escapeHtml, payLink, qrSvg, qrPng, showPayQr, ...helpers };
+  /**
+   * Load a page's data without a blink: show the last saved reply at once (if this tab has one),
+   * then always fetch fresh data and apply it again. `apply(reply)` copies the reply into the page.
+   */
+  async function load(vm, path, params, apply, busyKey) {
+    const key = busyKey || 'loading';
+    const saved = api.peek(path, params);
+    if (saved) apply(saved);
+    vm[key] = !saved;
+    try {
+      apply(await api.get(path, params));
+    } catch (e) {
+      toast(e.message);
+    } finally {
+      vm[key] = false;
+    }
+  }
+
+  global.Setlo = { mount, run, load, confirm: confirmDialog, alert: alertDialog, promptText, showCopy, escapeHtml, payLink, qrSvg, qrPng, showPayQr, ...helpers };
 })(window);

@@ -95,7 +95,7 @@ Setlo.mount({
     settleTotal() { return Object.values(this.d.settlements || {}).reduce((a, b) => a + b, 0); },
     accuracy() { return this.d.ocr_items ? Math.round(100 * (1 - this.d.ocr_corrected / this.d.ocr_items)) : null; },
   },
-  async mounted() { await Setlo.run(this, async () => { this.d = await api.get('admin.php', { view: 'overview' }); }, 'loading'); },
+  async mounted() { await Setlo.load(this, 'admin.php', { view: 'overview' }, (r) => { this.d = r; }); },
   methods: { pct(n) { return this.settleTotal ? Math.max(n ? 1 : 0, Math.round((100 * (n || 0)) / this.settleTotal)) : 0; } },
 });
 </script>

@@ -142,7 +142,7 @@ Setlo.mount({
   }),
   async mounted() {
     document.addEventListener('click', (e) => { if (!e.target.closest('[aria-label="Account menu"]') && !e.target.closest('form')) this.menu = false; });
-    await Setlo.run(this, async () => { this.d = await api.get('dashboard.php'); }, 'loading');
+    await Setlo.load(this, 'dashboard.php', null, (r) => { this.d = r; });
   },
   methods: {
     describe(a) {

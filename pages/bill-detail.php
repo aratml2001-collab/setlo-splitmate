@@ -8,9 +8,9 @@ if (!$billId) {
     redirect('pages/my-bills.php');
 }
 $back = 'my-bills.php';
+$headExtra = ['assets/js/summary.js'];
 require __DIR__ . '/../partials/head.php';
 ?>
-<script src="<?= h(url('assets/js/summary.js')) ?>?v=<?= @filemtime(__DIR__ . '/../assets/js/summary.js') ?>"></script>
 <div id="app" class="device" v-cloak>
 
   <div class="app-hero px-5 pb-5 pt-8">
@@ -228,8 +228,12 @@ Setlo.mount({
     },
   },
   async mounted() {
-    await Setlo.run(this, this.load, 'loading');
-    if (this.bill && this.bill.locked) this.tab = 'plan';
+    await Setlo.load(this, 'bills.php', { id: this.billId }, (r) => {
+      this.d = r;
+      this.bill = r.bill;
+      this.multiPay = r.payments.multi;
+      if (this.bill.locked) this.tab = 'plan';
+    });
   },
   methods: {
     async invite(mode) {

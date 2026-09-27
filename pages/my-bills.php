@@ -127,7 +127,7 @@ Setlo.mount({
     shownTotal() { return this.shown.reduce((s, b) => s + b.total, 0); },
   },
   async mounted() {
-    await Setlo.run(this, async () => { this.bills = (await api.get('bills.php')).bills; }, 'loading');
+    await Setlo.load(this, 'bills.php', null, (r) => { this.bills = r.bills; });
     if (new URLSearchParams(location.search).has('new')) this.openCreate();
   },
   methods: {

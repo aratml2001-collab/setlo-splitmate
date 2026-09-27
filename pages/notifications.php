@@ -38,11 +38,10 @@ require __DIR__ . '/../partials/head.php';
 Setlo.mount({
   data: () => ({ loading: true, items: [], unread: 0 }),
   async mounted() {
-    await Setlo.run(this, async () => {
-      const r = await api.get('notifications.php', { limit: 50 });
+    await Setlo.load(this, 'notifications.php', { limit: 50 }, (r) => {
       this.items = r.notifications;
       this.unread = r.unread;
-    }, 'loading');
+    });
   },
   methods: {
     markRead(n) {

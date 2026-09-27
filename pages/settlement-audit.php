@@ -86,12 +86,11 @@ Setlo.mount({
     },
   }),
   async mounted() {
-    await Setlo.run(this, async () => {
-      const r = await api.get('settlements.php', { id: this.id });
+    await Setlo.load(this, 'settlements.php', { id: this.id }, (r) => {
       this.s = r.settlement;
       this.events = r.events;
       this.others = r.others;
-    }, 'loading');
+    });
   },
   methods: { who(u) { return u.id === this.me ? 'You' : u.first; } },
 });
