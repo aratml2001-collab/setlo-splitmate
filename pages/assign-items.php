@@ -195,15 +195,18 @@ Setlo.mount({
     shares() { return this.calc.shares; },
   },
   async mounted() {
-    await Setlo.run(this, async () => {
-      const r = await api.get('bills.php', { id: this.billId });
+    let shown = null; // assignments as filled from this tab's saved reply
+    const state = () => JSON.stringify([this.items, this.members, this.paidBy]);
+    await Setlo.load(this, 'bills.php', { id: this.billId }, (r, fresh) => {
       if (!r.me.is_creator || r.bill.locked) { location.replace('bill-items.php?bill=' + this.billId); return; }
       if (!r.items.length) { location.replace('review-items.php?bill=' + this.billId); return; }
+      if (fresh && shown !== null && shown !== state()) return; // already tapping: keep their work
       this.bill = r.bill;
       this.members = r.members;
       this.paidBy = Object.keys(r.payments.paid).map(Number);
       this.items = r.items;
-    }, 'loading');
+      if (!fresh) shown = state();
+    });
     window.addEventListener('beforeunload', this.flush);
   },
   methods: {

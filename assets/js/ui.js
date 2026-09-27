@@ -331,15 +331,16 @@
 
   /**
    * Load a page's data without a blink: show the last saved reply at once (if this tab has one),
-   * then always fetch fresh data and apply it again. `apply(reply)` copies the reply into the page.
+   * then always fetch fresh data and apply it again. `apply(reply, fresh)` copies the reply into the page;
+   * `fresh` is false for the saved reply, true for the server's.
    */
   async function load(vm, path, params, apply, busyKey) {
     const key = busyKey || 'loading';
     const saved = api.peek(path, params);
-    if (saved) apply(saved);
+    if (saved) apply(saved, false);
     vm[key] = !saved;
     try {
-      apply(await api.get(path, params));
+      apply(await api.get(path, params), true);
     } catch (e) {
       toast(e.message);
     } finally {

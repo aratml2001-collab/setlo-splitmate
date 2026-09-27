@@ -116,18 +116,19 @@ Setlo.mount({
     pickable() { return this.bills.filter((b) => b.status === 'draft' || b.status === 'active'); },
   },
   async mounted() {
-    await Setlo.run(this, async () => {
-      if (!this.billId) {
-        this.bills = (await api.get('bills.php')).bills.filter((b) => b.link.startsWith('scan-receipt') || b.link.startsWith('assign-items'));
-        return;
-      }
-      const r = await api.get('bills.php', { id: this.billId });
+    if (!this.billId) {
+      await Setlo.load(this, 'bills.php', null, (r) => {
+        this.bills = r.bills.filter((b) => b.link.startsWith('scan-receipt') || b.link.startsWith('assign-items'));
+      });
+      return;
+    }
+    await Setlo.load(this, 'bills.php', { id: this.billId }, (r) => {
       if (!r.me.is_creator || r.bill.locked) {
         location.replace('bill-detail.php?bill=' + this.billId);
         return;
       }
       this.bill = r.bill;
-    }, 'loading');
+    });
   },
   methods: {
     async picked(e) {

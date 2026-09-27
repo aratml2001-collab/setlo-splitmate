@@ -114,7 +114,8 @@ Setlo.mount({
     me: <?= (int) $user['id'] ?>,
     loading: true, busy: false, bills: [],
     filters: ['all', 'active', 'settling', 'closed'], filter: 'all',
-    creating: false, search: '', results: [], timer: null,
+    // ?new=1 opens the Create Bill sheet in the very first paint (no pop-in on refresh)
+    creating: new URLSearchParams(location.search).has('new'), search: '', results: [], timer: null,
     form: { name: '', members: [], guests: [], payer_id: <?= (int) $user['id'] ?> },
     guestName: '',
   }),
@@ -127,8 +128,8 @@ Setlo.mount({
     shownTotal() { return this.shown.reduce((s, b) => s + b.total, 0); },
   },
   async mounted() {
+    if (this.creating) this.openCreate();
     await Setlo.load(this, 'bills.php', null, (r) => { this.bills = r.bills; });
-    if (new URLSearchParams(location.search).has('new')) this.openCreate();
   },
   methods: {
     openCreate() {

@@ -129,12 +129,13 @@ Setlo.mount({
     },
   },
   async mounted() {
-    await Setlo.run(this, async () => {
-      const r = await api.get('bills.php', { id: this.billId });
+    let shown = null; // the form as filled from this tab's saved reply
+    await Setlo.load(this, 'bills.php', { id: this.billId }, (r, fresh) => {
       if (!r.me.is_creator || r.bill.locked) {
         location.replace('bill-items.php?bill=' + this.billId);
         return;
       }
+      if (fresh && shown !== null && shown !== this.formState()) return; // already typing: keep their work
       this.bill = r.bill;
       this.rows = r.items.map((it) => ({ ...it, key: ++keySeq, unit_price: it.unit_price.toFixed(2), fixed: false, nudge: false }));
       this.tax = r.bill.tax.toFixed(2);
@@ -142,10 +143,14 @@ Setlo.mount({
       this.discount = r.bill.discount.toFixed(2);
       this.receiptTotal = r.bill.receipt_total === null ? '' : r.bill.receipt_total.toFixed(2);
       if (!this.rows.length) this.add();
-    }, 'loading');
+      if (!fresh) shown = this.formState();
+    });
   },
   methods: {
     money,
+    formState() {
+      return JSON.stringify([this.rows.map(({ key, ...row }) => row), this.tax, this.svc, this.discount, this.receiptTotal]);
+    },
     lineTotal(r) { return Math.round((Number(r.qty) || 0) * money(r.unit_price) * 100) / 100; },
     resolve(r, useSuggestion) {
       if (useSuggestion) r.name = r.suggestion;
