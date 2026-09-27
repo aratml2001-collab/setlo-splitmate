@@ -81,8 +81,22 @@ $amount = peso_str(cents($s['amount']));
 $myName = first_name($me['full_name']);
 
 /** Atomically move a settlement from one status to another; fails if someone else changed it first. */
+// $extraSql is interpolated into the SQL below, so every caller in this file must pass one of these
+// fixed literal fragments — never anything built from request input.
+const TRANSITION_EXTRA_SQL = [
+    '',
+    ', paid_at = NOW(), payment_ref = ?, proof_image = ?',
+    ', confirmed_at = NOW()',
+    ', disputed_at = NOW(), dispute_reason = ?',
+    ', paid_at = NULL, payment_ref = NULL, proof_image = NULL',
+    ', paid_at = NOW(), confirmed_at = NOW()',
+];
+
 function transition(int $id, string $from, string $to, string $extraSql = '', array $extra = []): void
 {
+    if (!in_array($extraSql, TRANSITION_EXTRA_SQL, true)) {
+        throw new InvalidArgumentException('Invalid $extraSql for transition().');
+    }
     $n = q("UPDATE settlements SET status = ? $extraSql WHERE id = ? AND status = ?", array_merge([$to], $extra, [$id, $from]))->rowCount();
     if ($n === 0) {
         fail('This settlement changed in the meantime. Refresh and try again.', 409);

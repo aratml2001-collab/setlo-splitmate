@@ -381,5 +381,15 @@
   });
   window.addEventListener('load', syncBurgers);
 
+  // Confirm before signing out, everywhere a sign-out form appears (sidebar, phone drawer, admin, account menu).
+  // Capture phase: runs before the click reaches the <button> and submits the form.
+  document.addEventListener('click', (e) => {
+    const form = e.target.closest('form[action="logout.php"]');
+    if (!form || !e.target.closest('button')) return;
+    e.preventDefault();
+    confirmDialog({ title: 'Sign out?', text: 'You can log back in anytime.', confirmText: 'Sign out' })
+      .then((ok) => { if (ok) form.submit(); });
+  }, true);
+
   global.Setlo = { mount, run, load, confirm: confirmDialog, alert: alertDialog, promptText, showCopy, escapeHtml, payLink, qrSvg, qrPng, showPayQr, ...helpers };
 })(window);

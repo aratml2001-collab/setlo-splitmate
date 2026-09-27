@@ -4,7 +4,13 @@ require __DIR__ . '/../includes/api.php';
 
 $me = api_user();
 
+// $col is interpolated into the SQL below, so it must never come from request input — only the two
+// hardcoded literals this file calls it with. The whitelist check keeps that true even if this
+// function is reused elsewhere later.
 $sum = function (string $col) use ($me): array {
+    if (!in_array($col, ['from_user_id', 'to_user_id'], true)) {
+        throw new InvalidArgumentException('Invalid column for $sum().');
+    }
     $r = q("SELECT COALESCE(SUM(amount), 0) AS total, COUNT(*) AS n FROM settlements WHERE $col = ? AND status <> 'settled'", [$me['id']])->fetch();
     return ['total' => (float) $r['total'], 'count' => (int) $r['n']];
 };
