@@ -5,7 +5,7 @@ $title = 'Review Items';
 $nav = 'scan';
 $billId = (int) ($_GET['bill'] ?? 0);
 if (!$billId) {
-    redirect('pages/scan-receipt.php');
+    redirect('pages/scan-receipt');
 }
 $back = 'scan-receipt.php?bill=' . $billId;
 $step = 2;
@@ -132,7 +132,7 @@ Setlo.mount({
     let shown = null; // the form as filled from this tab's saved reply
     await Setlo.load(this, 'bills.php', { id: this.billId }, (r, fresh) => {
       if (!r.me.is_creator || r.bill.locked) {
-        location.replace('bill-items.php?bill=' + this.billId);
+        location.replace('bill-items?bill=' + this.billId);
         return;
       }
       if (fresh && shown !== null && shown !== this.formState()) return; // already typing: keep their work

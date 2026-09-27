@@ -2,10 +2,10 @@
 // Admin panel shell (opens layout). Set $adminNav, $title, $subtitle before including; close with admin-bottom.php.
 $openDisputes = (int) q("SELECT COUNT(*) FROM settlements WHERE status = 'disputed'")->fetchColumn();
 $links = [
-    'overview' => ['admin-dashboard.php', 'Overview', 'M3 12l9-9 9 9M5 10v10h14V10'],
-    'users'    => ['admin-users.php', 'Users', 'M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m5-6.13a4 4 0 110 8 4 4 0 010-8z'],
-    'bills'    => ['admin-bills.php', 'Bills & Settlements', 'M6 3h12v18l-3-2-3 2-3-2-3 2V3zM9 8h6M9 12h6'],
-    'disputes' => ['admin-disputes.php', 'Disputes', 'M12 9v3.75m0 3.75h.008M21 12a9 9 0 11-18 0 9 9 0 0118 0z'],
+    'overview' => ['admin-dashboard', 'Overview', 'M3 12l9-9 9 9M5 10v10h14V10'],
+    'users'    => ['admin-users', 'Users', 'M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m5-6.13a4 4 0 110 8 4 4 0 010-8z'],
+    'bills'    => ['admin-bills', 'Bills & Settlements', 'M6 3h12v18l-3-2-3 2-3-2-3 2V3zM9 8h6M9 12h6'],
+    'disputes' => ['admin-disputes', 'Disputes', 'M12 9v3.75m0 3.75h.008M21 12a9 9 0 11-18 0 9 9 0 0118 0z'],
 ];
 ?>
 <div class="flex min-h-screen bg-slate-50">
@@ -30,7 +30,7 @@ $links = [
       <?php endforeach; ?>
     </nav>
     <div class="border-t border-white/10 px-3 py-4">
-      <form method="post" action="logout.php" class="admin-nav">
+      <form method="post" action="logout" class="admin-nav">
         <input type="hidden" name="csrf" value="<?= h(csrf_token()) ?>" />
         <button class="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-sm hover:bg-white/5" title="Log Out">
           <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>

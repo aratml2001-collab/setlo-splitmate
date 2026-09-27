@@ -5,7 +5,7 @@ $title = 'Assign Items';
 $nav = 'scan';
 $billId = (int) ($_GET['bill'] ?? 0);
 if (!$billId) {
-    redirect('pages/my-bills.php');
+    redirect('pages/my-bills');
 }
 $back = 'review-items.php?bill=' . $billId;
 $step = 3;
@@ -198,8 +198,8 @@ Setlo.mount({
     let shown = null; // assignments as filled from this tab's saved reply
     const state = () => JSON.stringify([this.items, this.members, this.paidBy]);
     await Setlo.load(this, 'bills.php', { id: this.billId }, (r, fresh) => {
-      if (!r.me.is_creator || r.bill.locked) { location.replace('bill-items.php?bill=' + this.billId); return; }
-      if (!r.items.length) { location.replace('review-items.php?bill=' + this.billId); return; }
+      if (!r.me.is_creator || r.bill.locked) { location.replace('bill-items?bill=' + this.billId); return; }
+      if (!r.items.length) { location.replace('review-items?bill=' + this.billId); return; }
       if (fresh && shown !== null && shown !== state()) return; // already tapping: keep their work
       this.bill = r.bill;
       this.members = r.members;

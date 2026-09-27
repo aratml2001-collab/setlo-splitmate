@@ -4,7 +4,7 @@ $admin = require_admin();
 $title = 'Platform Overview';
 $subtitle = 'Snapshot as of ' . date('M j, Y, g:i A');
 $adminNav = 'overview';
-$loginPage = 'admin-login.php';
+$loginPage = 'admin-login';
 require __DIR__ . '/../partials/head.php';
 require __DIR__ . '/../partials/admin-top.php';
 ?>
@@ -30,7 +30,7 @@ require __DIR__ . '/../partials/admin-top.php';
       <div class="card p-4" :class="{ '!border-red-200': d.settlements.disputed }">
         <p class="text-xs text-slate-500">Open Disputes</p>
         <p class="mt-1 text-2xl font-bold" :class="d.settlements.disputed ? 'text-red-600' : 'text-ink'">{{ d.settlements.disputed || 0 }}</p>
-        <a href="admin-disputes.php" class="mt-1 inline-block text-[11px] font-semibold text-red-600">Review now →</a>
+        <a href="admin-disputes" class="mt-1 inline-block text-[11px] font-semibold text-red-600">Review now →</a>
       </div>
     </div>
 
@@ -63,7 +63,7 @@ require __DIR__ . '/../partials/admin-top.php';
     <div class="card overflow-x-auto p-5">
       <div class="mb-3 flex items-center justify-between">
         <h2 class="text-sm font-bold text-slate-800">Recent Bills Across the Platform</h2>
-        <a href="admin-bills.php" class="text-xs font-semibold text-brand-600">View all →</a>
+        <a href="admin-bills" class="text-xs font-semibold text-brand-600">View all →</a>
       </div>
       <table class="w-full min-w-[520px] text-sm">
         <thead><tr class="border-b border-slate-100 text-left text-xs text-slate-400">

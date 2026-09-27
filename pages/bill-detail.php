@@ -5,7 +5,7 @@ $title = 'Bill Detail';
 $nav = 'bills';
 $billId = (int) ($_GET['bill'] ?? 0);
 if (!$billId) {
-    redirect('pages/my-bills.php');
+    redirect('pages/my-bills');
 }
 $back = 'my-bills.php';
 $headExtra = ['assets/js/summary.js'];
@@ -149,7 +149,7 @@ require __DIR__ . '/../partials/head.php';
         </div>
         <status-pill :status="s.status"></status-pill>
       </a>
-      <a v-if="d.settlements.length && bill.status !== 'closed'" href="my-settlements.php" class="block pt-1 text-center text-xs font-semibold text-brand-600">Manage in My Settlements →</a>
+      <a v-if="d.settlements.length && bill.status !== 'closed'" href="my-settlements" class="block pt-1 text-center text-xs font-semibold text-brand-600">Manage in My Settlements →</a>
     </template>
 
     <!-- Items -->

@@ -5,7 +5,7 @@ $title = 'Bill Items';
 $nav = 'bills';
 $billId = (int) ($_GET['bill'] ?? 0);
 if (!$billId) {
-    redirect('pages/my-bills.php');
+    redirect('pages/my-bills');
 }
 $back = 'my-bills.php';
 require __DIR__ . '/../partials/head.php';

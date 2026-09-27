@@ -101,7 +101,7 @@ switch (input('action', '')) {
         if (!$n) {
             fail('User not found.', 404);
         }
-        notify($uid, 'admin', 'The app manager reset your password. Sign in with the temporary password they gave you, then change it on your profile.', 'profile.php');
+        notify($uid, 'admin', 'The app manager reset your password. Sign in with the temporary password they gave you, then change it on your profile.', 'profile');
         json_ok(['temporary_password' => $temp]);
 
     case 'message_both':
@@ -114,7 +114,7 @@ switch (input('action', '')) {
             fail('Message is too long.', 422);
         }
         foreach ([(int) $s['from_user_id'], (int) $s['to_user_id']] as $uid) {
-            notify($uid, 'admin', $msg, 'my-settlements.php');
+            notify($uid, 'admin', $msg, 'my-settlements');
         }
         log_event((int) $s['id'], $admin['id'], 'nudged', 'App manager messaged both parties.');
         json_ok();

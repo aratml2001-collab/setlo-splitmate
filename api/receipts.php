@@ -50,11 +50,11 @@ $empty = ['items' => [], 'subtotal' => null, 'tax' => 0.0, 'service_charge' => 0
 switch ($action) {
     case 'manual':
         q("UPDATE bills SET status = 'active', ocr_status = 'skipped' WHERE id = ? AND status = 'draft'", [$bill['id']]);
-        json_ok(['redirect' => 'review-items.php?bill=' . $bill['id']]);
+        json_ok(['redirect' => 'review-items?bill=' . $bill['id']]);
 
     case 'demo':
         store_extraction($bill, DEMO_RECEIPT, 'ok', DEMO_RECEIPT['raw_text'], null);
-        json_ok(['ocr' => 'ok', 'redirect' => 'review-items.php?bill=' . $bill['id']]);
+        json_ok(['ocr' => 'ok', 'redirect' => 'review-items?bill=' . $bill['id']]);
 
     case 'upload':
         $name = save_uploaded_image('image', 'receipts', 'bill' . $bill['id']);
@@ -76,7 +76,7 @@ switch ($action) {
             'available' => gemini_available(),
             'found'     => count($parsed['items']),
             'error'     => $error,
-            'redirect'  => 'review-items.php?bill=' . $bill['id'],
+            'redirect'  => 'review-items?bill=' . $bill['id'],
         ]);
 }
 

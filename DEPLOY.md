@@ -47,9 +47,12 @@ echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
 sudo apt update
 sudo apt install -y apache2 libapache2-mod-php php-mysql php-curl php-gd php-mbstring mariadb-server \
                     certbot python3-certbot-apache
+sudo a2enmod rewrite && sudo systemctl restart apache2
 ```
 
 Use **MariaDB, not MySQL**: `database/migrate.php` uses `ADD COLUMN IF NOT EXISTS`, which is MariaDB-only syntax. XAMPP ships MariaDB too.
+
+`mod_rewrite` is what serves every page without `.php` in the URL (the root `.htaccess`) and blocks directory listing — XAMPP has it enabled by default, but a fresh Debian Apache install doesn't, so `a2enmod rewrite` above is required.
 
 ## 3. Tune for 1 GB RAM and phone photos
 

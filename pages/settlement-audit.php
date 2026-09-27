@@ -5,7 +5,7 @@ $title = 'Settlement Audit Trail';
 $nav = 'settle';
 $sid = (int) ($_GET['id'] ?? 0);
 if (!$sid) {
-    redirect('pages/my-settlements.php');
+    redirect('pages/my-settlements');
 }
 $back = 'my-settlements.php';
 require __DIR__ . '/../partials/head.php';

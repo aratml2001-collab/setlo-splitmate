@@ -35,7 +35,7 @@ require __DIR__ . '/../partials/head.php';
       </div>
       <status-pill :status="b.status"></status-pill>
     </a>
-    <a href="my-bills.php?new=1" class="btn-pill btn-pill-primary">+ Create a new bill</a>
+    <a href="my-bills?new=1" class="btn-pill btn-pill-primary">+ Create a new bill</a>
   </div>
 
   <div v-else class="flex flex-1 flex-col px-5 pb-5 pt-4">
@@ -124,7 +124,7 @@ Setlo.mount({
     }
     await Setlo.load(this, 'bills.php', { id: this.billId }, (r) => {
       if (!r.me.is_creator || r.bill.locked) {
-        location.replace('bill-detail.php?bill=' + this.billId);
+        location.replace('bill-detail?bill=' + this.billId);
         return;
       }
       this.bill = r.bill;

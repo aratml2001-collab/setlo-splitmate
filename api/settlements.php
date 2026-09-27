@@ -121,7 +121,7 @@ switch (input('action', '')) {
         }
         $details = array_filter([$ref ? "ref no. $ref" : null, $proof ? 'proof attached' : null]);
         log_event($id, $me['id'], 'marked_paid', "$myName$onBehalf marked $amount as sent to " . first_name($s['to_name']) . ($details ? ' (' . implode(', ', $details) . ')' : '') . '.');
-        notify((int) $s['to_user_id'], 'paid', "$myName$onBehalf marked $amount as Paid for {$s['bill_name']}. Confirm you received it.", 'my-settlements.php?tab=owed');
+        notify((int) $s['to_user_id'], 'paid', "$myName$onBehalf marked $amount as Paid for {$s['bill_name']}. Confirm you received it.", 'my-settlements?tab=owed');
         $pdo->commit();
         break;
 
@@ -132,7 +132,7 @@ switch (input('action', '')) {
         $pdo->beginTransaction();
         transition($id, 'awaiting', 'settled', ', confirmed_at = NOW()');
         log_event($id, $me['id'], 'confirmed', "$myName confirmed receiving the payment. Settlement closed.");
-        notify((int) $s['from_user_id'], 'confirmed', "$myName confirmed your $amount payment for {$s['bill_name']}.", 'settlement-audit.php?id=' . $id);
+        notify((int) $s['from_user_id'], 'confirmed', "$myName confirmed your $amount payment for {$s['bill_name']}.", 'settlement-audit?id=' . $id);
         maybe_close_bill((int) $s['bill_id']);
         $pdo->commit();
         break;
@@ -148,7 +148,7 @@ switch (input('action', '')) {
         $pdo->beginTransaction();
         transition($id, 'awaiting', 'disputed', ', disputed_at = NOW(), dispute_reason = ?', [$reason]);
         log_event($id, $me['id'], 'disputed', $reason);
-        notify((int) $s['from_user_id'], 'disputed', "$myName disputed your $amount payment for {$s['bill_name']}.", 'my-settlements.php');
+        notify((int) $s['from_user_id'], 'disputed', "$myName disputed your $amount payment for {$s['bill_name']}.", 'my-settlements');
         $pdo->commit();
         break;
 
@@ -160,7 +160,7 @@ switch (input('action', '')) {
         transition($id, 'disputed', 'pending', ', paid_at = NULL, payment_ref = NULL, proof_image = NULL');
         delete_upload('proofs', $s['proof_image']);
         log_event($id, $me['id'], 'resent', "$myName reviewed the dispute and reopened the payment.");
-        notify((int) $s['to_user_id'], 'resent', "$myName reopened the disputed $amount payment for {$s['bill_name']}.", 'my-settlements.php?tab=owed');
+        notify((int) $s['to_user_id'], 'resent', "$myName reopened the disputed $amount payment for {$s['bill_name']}.", 'my-settlements?tab=owed');
         $pdo->commit();
         break;
 
@@ -185,10 +185,10 @@ switch (input('action', '')) {
         }
         if ($isReceiver && $s['status'] === 'pending') {
             [$target, $msg] = [(int) $s['from_user_id'], "$myName sent a reminder: you owe $amount for {$s['bill_name']}."];
-            $link = 'my-settlements.php';
+            $link = 'my-settlements';
         } elseif ($isSender && $s['status'] === 'awaiting') {
             [$target, $msg] = [(int) $s['to_user_id'], "$myName is waiting for you to confirm their $amount payment for {$s['bill_name']}."];
-            $link = 'my-settlements.php?tab=owed';
+            $link = 'my-settlements?tab=owed';
         } else {
             fail('Nothing to remind about right now.', 409);
         }

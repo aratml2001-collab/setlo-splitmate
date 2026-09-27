@@ -1,6 +1,6 @@
 <?php // Closes the landing shell opened by auth-landing-top.php and adds the phone mockup (xl screens). ?>
       <p class="mt-6 text-center text-[12px] text-slate-400">
-        App manager? <a href="admin-login.php" class="font-semibold hover:text-brand-700">Admin Panel</a> · © 2026 Setlo
+        App manager? <a href="admin-login" class="font-semibold hover:text-brand-700">Admin Panel</a> · © 2026 Setlo
       </p>
     </main>
 

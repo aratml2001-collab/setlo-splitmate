@@ -160,14 +160,14 @@ Role is never fixed by who created the Bill — it's determined by who paid the 
 - Dispute handling is intentionally simple, not a full resolution workflow.
 ## Login & sign-up landing
 
-- Guests land on `pages/login.php`; the old splash page redirects there. Log in and **Create account** share one design: brand and features on the left, the card in the middle, an illustrative phone on the right. The side columns hide on smaller screens.
+- Guests land on `pages/login`; the old splash page redirects there. Log in and **Create account** share one design: brand and features on the left, the card in the middle, an illustrative phone on the right. The side columns hide on smaller screens.
 - **Remember me** keeps you signed in for 30 days. Untick it on shared computers.
 - **Continue with Google** works once a Google OAuth client ID is set (`GOOGLE_CLIENT_ID`; see DEPLOY.md → *Google sign-in*). Until then, the button explains that it isn't set up.
 - **Forgot password?** The app can't send email, so the app manager resets it in **Admin → Users → Reset password** and gives the user a temporary password to change on their Profile.
 
 ## Pay-me QR, validation and security
 
-- **Pay-me QR (every account):** each account gets its own QR automatically; no uploads. Scanning it opens `pages/pay.php?u=…` with the person's payment method and number, plus anything the scanner still owes them. Profile → **Your Pay-me QR** has Download, Share link, and **Get a new QR** (the old one stops working). "Show QR" on My Settlements shows the receiver's QR.
+- **Pay-me QR (every account):** each account gets its own QR automatically; no uploads. Scanning it opens `pages/pay?u=…` with the person's payment method and number, plus anything the scanner still owes them. Profile → **Your Pay-me QR** has Download, Share link, and **Get a new QR** (the old one stops working). "Show QR" on My Settlements shows the receiver's QR.
 - **SweetAlert2** handles every confirmation, message and notification (no browser `confirm()`/`prompt()` boxes).
 - **Validation while typing** on every form (`assets/js/validate.js`), with the same rules enforced by the API (`includes/validate.php`). Passwords need 8+ characters with a letter and a number.
 - **Security:** sign-in is locked for 15 minutes after 5 wrong passwords per email and device. Pages send security headers (Content-Security-Policy, no framing, no MIME sniffing), and CDN scripts are pinned with integrity hashes. Sessions use strict mode, and the cookie is marked `Secure` on HTTPS.

@@ -3,7 +3,7 @@ require __DIR__ . '/../includes/bootstrap.php';
 require __DIR__ . '/../includes/google.php';
 $next = safe_next((string) ($_GET['next'] ?? ''));
 if (current_user()) {
-    redirect($next ? 'pages/' . $next : 'index.php');
+    redirect($next ? 'pages/' . $next : '');
 }
 $title = 'Log In';
 $bodyClass = 'landing-body';
@@ -58,7 +58,7 @@ require __DIR__ . '/../partials/auth-landing-top.php';
   <div ref="google" class="flex min-h-[52px] justify-center"></div>
 
   <p class="mt-6 text-center text-[14px] text-slate-600">
-    Don't have an account? <a href="register.php<?= $next ? '?next=' . h(urlencode($next)) : '' ?>" class="font-bold text-brand-700 hover:underline">Sign up</a>
+    Don't have an account? <a href="register<?= $next ? '?next=' . h(urlencode($next)) : '' ?>" class="font-bold text-brand-700 hover:underline">Sign up</a>
   </p>
 
   <details class="mt-5 rounded-2xl border border-dashed border-slate-200 px-4 py-2.5 text-[12px] text-slate-500">

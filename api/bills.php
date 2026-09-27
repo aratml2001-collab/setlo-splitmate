@@ -154,27 +154,27 @@ if ($action === 'create') {
     foreach ($all as $uid) {
         q('INSERT INTO bill_members (bill_id, user_id) VALUES (?, ?)', [$billId, $uid]);
         if ($uid !== $me['id']) {
-            notify($uid, 'added', first_name($me['full_name']) . " added you to $name.", 'bill-items.php?bill=' . $billId);
+            notify($uid, 'added', first_name($me['full_name']) . " added you to $name.", 'bill-items?bill=' . $billId);
         }
     }
     foreach (array_slice((array) input('guest_names', []), 0, 20) as $guest) {
         add_guest($billId, (string) $guest);
     }
     $pdo->commit();
-    json_ok(['id' => $billId, 'redirect' => 'scan-receipt.php?bill=' . $billId]);
+    json_ok(['id' => $billId, 'redirect' => 'scan-receipt?bill=' . $billId]);
 }
 
 if ($action === 'join') {
     $bill = bill_by_invite(str_input('code', 20));
     if (is_member($bill['id'], $me['id'])) {
-        json_ok(['redirect' => 'bill-items.php?bill=' . $bill['id']]);
+        json_ok(['redirect' => 'bill-items?bill=' . $bill['id']]);
     }
     if (in_array($bill['status'], ['settling', 'closed'], true)) {
         fail('This bill is already settling, so new members can’t join.', 409);
     }
     q('INSERT INTO bill_members (bill_id, user_id) VALUES (?, ?)', [$bill['id'], $me['id']]);
-    notify((int) $bill['creator_id'], 'added', first_name($me['full_name']) . " joined {$bill['name']} using your invite link.", 'bill-detail.php?bill=' . $bill['id']);
-    json_ok(['redirect' => 'bill-items.php?bill=' . $bill['id']]);
+    notify((int) $bill['creator_id'], 'added', first_name($me['full_name']) . " joined {$bill['name']} using your invite link.", 'bill-detail?bill=' . $bill['id']);
+    json_ok(['redirect' => 'bill-items?bill=' . $bill['id']]);
 }
 
 $bill = bill_for(int_param('bill_id'), $me);
@@ -216,7 +216,7 @@ switch ($action) {
             fail('User not found.', 404);
         }
         q('INSERT IGNORE INTO bill_members (bill_id, user_id) VALUES (?, ?)', [$bill['id'], $uid]);
-        notify($uid, 'added', first_name($me['full_name']) . " added you to {$bill['name']}.", 'bill-items.php?bill=' . $bill['id']);
+        notify($uid, 'added', first_name($me['full_name']) . " added you to {$bill['name']}.", 'bill-items?bill=' . $bill['id']);
         json_ok(['members' => bill_members($bill['id'])]);
 
     case 'add_guest':
@@ -296,7 +296,7 @@ switch ($action) {
         require_creator($bill, $me);
         require_editable($bill);
         start_settling($bill, $me);
-        json_ok(['redirect' => 'bill-detail.php?bill=' . $bill['id']]);
+        json_ok(['redirect' => 'bill-detail?bill=' . $bill['id']]);
 
     case 'delete':
         require_creator($bill, $me);
@@ -310,7 +310,7 @@ switch ($action) {
         foreach ($guests as $gid) {
             q("DELETE FROM users WHERE id = ? AND role = 'guest'", [$gid]);
         }
-        json_ok(['redirect' => 'my-bills.php']);
+        json_ok(['redirect' => 'my-bills']);
 }
 
 fail('Unknown action.', 404);

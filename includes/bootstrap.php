@@ -158,10 +158,10 @@ function require_login(): array
 {
     $user = current_user();
     if (!$user) {
-        redirect('pages/login.php');
+        redirect('pages/login');
     }
     if ($user['role'] === 'admin') {
-        redirect('pages/admin-dashboard.php');
+        redirect('pages/admin-dashboard');
     }
     return $user;
 }
@@ -170,7 +170,7 @@ function require_admin(): array
 {
     $user = current_user();
     if (!$user || $user['role'] !== 'admin') {
-        redirect('pages/admin-login.php');
+        redirect('pages/admin-login');
     }
     return $user;
 }
@@ -188,7 +188,7 @@ function initials(string $name): string
 /** Only allow in-app "continue to" targets (invite and Pay-me links), never external URLs. */
 function safe_next(string $next): string
 {
-    return preg_match('/^(join\.php\?code|pay\.php\?u)=[A-Za-z0-9]{12}$/', $next) ? $next : '';
+    return preg_match('/^(join\?code|pay\?u)=[A-Za-z0-9]{12}$/', $next) ? $next : '';
 }
 
 function first_name(string $name): string

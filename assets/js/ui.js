@@ -204,7 +204,7 @@
       outside(e) { if (!this.$el.contains(e.target)) this.open = false; },
       async go(n) {
         if (!n.is_read) api.post('notifications.php', { action: 'read', id: n.id }).catch(() => {});
-        location.href = n.link || 'notifications.php';
+        location.href = n.link || 'notifications';
       },
       timeAgo,
     },
@@ -216,7 +216,7 @@
       <div v-if="open" class="hero-pop tile absolute right-0 top-12 z-40 w-80 max-w-[88vw] overflow-hidden text-slate-800 shadow-xl">
         <div class="flex items-center justify-between border-b border-slate-100 px-4 py-3">
           <span class="text-sm font-bold text-ink">Notifications</span>
-          <a href="notifications.php" class="text-xs font-bold text-brand-700">See all</a>
+          <a href="notifications" class="text-xs font-bold text-brand-700">See all</a>
         </div>
         <div class="max-h-80 divide-y divide-slate-100 overflow-y-auto">
           <p v-if="!items.length" class="px-4 py-6 text-center text-[13px] text-slate-400">You're all caught up.</p>
@@ -384,7 +384,7 @@
   // Confirm before signing out, everywhere a sign-out form appears (sidebar, phone drawer, admin, account menu).
   // Capture phase: runs before the click reaches the <button> and submits the form.
   document.addEventListener('click', (e) => {
-    const form = e.target.closest('form[action="logout.php"]');
+    const form = e.target.closest('form[action="logout"]');
     if (!form || !e.target.closest('button')) return;
     e.preventDefault();
     confirmDialog({ title: 'Sign out?', text: 'You can log back in anytime.', confirmText: 'Sign out' })

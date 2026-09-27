@@ -52,7 +52,7 @@
     }
 
     if (res.status === 401) {
-      location.href = meta('login-page') || 'login.php';
+      location.href = meta('login-page') || 'login';
       throw new ApiError(json.error, 401, json);
     }
     if (!res.ok || !json.ok) {

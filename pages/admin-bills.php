@@ -4,7 +4,7 @@ $admin = require_admin();
 $title = 'Bills & Settlements';
 $subtitle = 'Read-only monitoring across all bills';
 $adminNav = 'bills';
-$loginPage = 'admin-login.php';
+$loginPage = 'admin-login';
 require __DIR__ . '/../partials/head.php';
 require __DIR__ . '/../partials/admin-top.php';
 ?>

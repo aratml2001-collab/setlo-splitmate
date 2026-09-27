@@ -3,7 +3,7 @@
  * Page head. Set before including:
  *   $title      page title (required)
  *   $bodyClass  optional extra classes for <body>
- *   $loginPage  where the API client sends expired sessions (default login.php)
+ *   $loginPage  where the API client sends expired sessions (default login)
  *   $headExtra  optional list of extra stylesheets (https:// URLs), fonts to preload (.woff2) and scripts (app paths, e.g. assets/js/x.js),
  *               loaded here so they are ready before the first paint (no flash)
  */
@@ -16,7 +16,7 @@ header('Cache-Control: no-store');
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="csrf-token" content="<?= h(csrf_token()) ?>" />
 <meta name="api-base" content="<?= h(url('api/')) ?>" />
-<meta name="login-page" content="<?= h($loginPage ?? 'login.php') ?>" />
+<meta name="login-page" content="<?= h($loginPage ?? 'login') ?>" />
 <meta name="user-id" content="<?= (int) (current_user()['id'] ?? 0) ?>" />
 <title><?= h($title) ?> · Setlo</title>
 <link rel="icon" type="image/png" href="<?= h(url('assets/icons/icon-192.png')) ?>" />

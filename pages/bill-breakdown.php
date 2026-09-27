@@ -5,7 +5,7 @@ $title = 'Bill Breakdown';
 $nav = 'bills';
 $billId = (int) ($_GET['bill'] ?? 0);
 if (!$billId) {
-    redirect('pages/bill-history.php');
+    redirect('pages/bill-history');
 }
 $back = 'bill-history.php';
 $headExtra = ['assets/js/summary.js'];

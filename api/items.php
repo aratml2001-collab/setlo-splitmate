@@ -85,4 +85,4 @@ q(
 );
 $pdo->commit();
 
-json_ok(['redirect' => 'assign-items.php?bill=' . $bill['id']]);
+json_ok(['redirect' => 'assign-items?bill=' . $bill['id']]);

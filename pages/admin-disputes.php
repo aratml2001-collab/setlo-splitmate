@@ -4,7 +4,7 @@ $admin = require_admin();
 $title = 'Dispute Queue';
 $subtitle = "Setlo's dispute path is intentionally simple: view context, and nudge both sides to resolve.";
 $adminNav = 'disputes';
-$loginPage = 'admin-login.php';
+$loginPage = 'admin-login';
 require __DIR__ . '/../partials/head.php';
 require __DIR__ . '/../partials/admin-top.php';
 ?>

@@ -4,7 +4,7 @@ $admin = require_admin();
 $title = 'User Management';
 $subtitle = 'Search, suspend or reactivate end-user accounts';
 $adminNav = 'users';
-$loginPage = 'admin-login.php';
+$loginPage = 'admin-login';
 require __DIR__ . '/../partials/head.php';
 require __DIR__ . '/../partials/admin-top.php';
 ?>

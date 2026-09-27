@@ -2,7 +2,7 @@
   "name": "Setlo — split food bills",
   "short_name": "Setlo",
   "description": "Scan the receipt, split it fair, confirm it's paid.",
-  "start_url": "./index.php",
+  "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
@@ -14,7 +14,7 @@
     { "src": "assets/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ],
   "shortcuts": [
-    { "name": "New bill", "url": "./pages/my-bills.php?new=1", "icons": [{ "src": "assets/icons/icon-192.png", "sizes": "192x192" }] },
-    { "name": "My settlements", "url": "./pages/my-settlements.php", "icons": [{ "src": "assets/icons/icon-192.png", "sizes": "192x192" }] }
+    { "name": "New bill", "url": "./pages/my-bills?new=1", "icons": [{ "src": "assets/icons/icon-192.png", "sizes": "192x192" }] },
+    { "name": "My settlements", "url": "./pages/my-settlements", "icons": [{ "src": "assets/icons/icon-192.png", "sizes": "192x192" }] }
   ]
 }

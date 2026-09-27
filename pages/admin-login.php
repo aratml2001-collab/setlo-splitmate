@@ -1,10 +1,10 @@
 <?php
 require __DIR__ . '/../includes/bootstrap.php';
 if ((current_user()['role'] ?? '') === 'admin') {
-    redirect('pages/admin-dashboard.php');
+    redirect('pages/admin-dashboard');
 }
 $title = 'Admin Log In';
-$loginPage = 'admin-login.php';
+$loginPage = 'admin-login';
 $bodyClass = 'min-h-screen flex items-center justify-center !bg-gradient-to-br from-brand-700 to-ink';
 require __DIR__ . '/../partials/head.php';
 ?>
@@ -29,7 +29,7 @@ require __DIR__ . '/../partials/head.php';
       <p v-if="error" class="rounded-lg bg-rose-50 px-3 py-2 text-xs font-semibold text-rose-600">{{ error }}</p>
       <button class="btn btn-primary w-full" :disabled="busy">{{ busy ? 'Signing in…' : 'Log In to Admin Panel' }}</button>
     </div>
-    <p class="mt-6 text-center text-xs text-slate-400">Not an admin? <a href="login.php" class="font-semibold text-brand-600">Go to user sign in</a></p>
+    <p class="mt-6 text-center text-xs text-slate-400">Not an admin? <a href="login" class="font-semibold text-brand-600">Go to user sign in</a></p>
   </form>
   <p class="mt-4 text-center text-xs text-brand-100/70">Setlo · Internal tool for platform oversight, not end users</p>
 </div>

@@ -297,15 +297,15 @@ function bill_card(array $bill): array
 function bill_link(array $bill, int $userId): string
 {
     if ($bill['status'] === 'closed') {
-        return 'bill-breakdown.php?bill=' . $bill['id'];
+        return 'bill-breakdown?bill=' . $bill['id'];
     }
     if ($bill['status'] === 'settling') {
-        return 'bill-detail.php?bill=' . $bill['id'];
+        return 'bill-detail?bill=' . $bill['id'];
     }
     if ((int) $bill['creator_id'] !== $userId) {
-        return 'bill-items.php?bill=' . $bill['id'];
+        return 'bill-items?bill=' . $bill['id'];
     }
-    return $bill['status'] === 'draft' ? 'scan-receipt.php?bill=' . $bill['id'] : 'assign-items.php?bill=' . $bill['id'];
+    return $bill['status'] === 'draft' ? 'scan-receipt?bill=' . $bill['id'] : 'assign-items?bill=' . $bill['id'];
 }
 
 /** A new unique 12-character code for a user's "Pay me" QR (unambiguous characters only). */
@@ -416,10 +416,10 @@ function start_settling(array $bill, array $actor): void
             q('INSERT INTO settlements (bill_id, from_user_id, to_user_id, amount) VALUES (?, ?, ?, ?)', [$bill['id'], $from, $to, pesos($c)]);
             $sid = (int) $pdo->lastInsertId();
             log_event($sid, $actor['id'], 'created', 'Generated from ' . $bill['name'] . ' balances.');
-            notify($from, 'settling', "You owe {$names[$to]} " . peso_str($c) . " for {$bill['name']}.", 'my-settlements.php');
+            notify($from, 'settling', "You owe {$names[$to]} " . peso_str($c) . " for {$bill['name']}.", 'my-settlements');
         }
         foreach (array_unique(array_column($plan['transfers'], 1)) as $to) {
-            notify($to, 'settling', "{$bill['name']} is now settling — you'll be asked to confirm each payment.", 'bill-detail.php?bill=' . $bill['id']);
+            notify($to, 'settling', "{$bill['name']} is now settling — you'll be asked to confirm each payment.", 'bill-detail?bill=' . $bill['id']);
         }
         maybe_close_bill($bill['id']);
         $pdo->commit();
@@ -437,7 +437,7 @@ function maybe_close_bill(int $billId): void
         if ($changed) {
             $name = (string) q('SELECT name FROM bills WHERE id = ?', [$billId])->fetchColumn();
             foreach (bill_members($billId) as $m) {
-                notify($m['id'], 'closed', "$name is fully settled and closed.", 'bill-breakdown.php?bill=' . $billId);
+                notify($m['id'], 'closed', "$name is fully settled and closed.", 'bill-breakdown?bill=' . $billId);
             }
         }
     }

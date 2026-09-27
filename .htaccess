@@ -7,3 +7,25 @@
 
 # Database backups (tools\backup.cmd) must never be downloadable
 RedirectMatch 403 ^.*/backups/
+
+RewriteEngine On
+Options -Indexes
+
+# A folder with no index file (pages/, assets/, or any other) is "not found", not a listing.
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteCond %{REQUEST_FILENAME}/index.php !-f
+RewriteRule ^ - [R=404,L]
+
+# Clean URLs for pages/ only - api/*.php is never navigated to (only fetch()/POSTed by JS), and a
+# redirect would turn a POST into a GET and drop its body, so it must never match api/ requests.
+# (No RewriteBase needed - %1 already holds the full path, so this works both at /SplitMate/ and at
+# a domain root.)
+
+# A request that still says ".../pages/foo.php" is redirected to ".../pages/foo".
+RewriteCond %{THE_REQUEST} \s/+(.*/pages/[a-zA-Z0-9_-]+)\.php[\s?] [NC]
+RewriteRule ^ /%1 [R=301,L]
+
+# Serve ".../pages/foo" using pages/foo.php internally - the URL bar never shows .php.
+RewriteCond %{REQUEST_URI} /pages/[a-zA-Z0-9_-]+$
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^(.*)$ $1.php [L]

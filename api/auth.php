@@ -62,7 +62,7 @@ switch ($action) {
         login_user((int) $u['id'], (bool) input('remember', false));
         json_ok([
             'role'     => $u['role'],
-            'redirect' => $u['role'] === 'admin' ? 'admin-dashboard.php' : 'dashboard.php',
+            'redirect' => $u['role'] === 'admin' ? 'admin-dashboard' : 'dashboard',
             'csrf'     => csrf_token(),
         ]);
 
@@ -96,7 +96,7 @@ switch ($action) {
             [trim($name), $email, password_hash($password, PASSWORD_DEFAULT), $palette[array_rand($palette)], new_pay_code()]
         );
         login_user((int) db()->lastInsertId(), true);
-        json_ok(['redirect' => 'dashboard.php', 'csrf' => csrf_token()]);
+        json_ok(['redirect' => 'dashboard', 'csrf' => csrf_token()]);
 
     case 'google':
         // Sign in or sign up with a Google ID token from Google Identity Services.
@@ -132,11 +132,11 @@ switch ($action) {
             $isNew = true;
         }
         login_user($userId, (bool) input('remember', true));
-        json_ok(['redirect' => $isNew ? 'profile.php' : 'dashboard.php', 'new' => $isNew, 'csrf' => csrf_token()]);
+        json_ok(['redirect' => $isNew ? 'profile' : 'dashboard', 'new' => $isNew, 'csrf' => csrf_token()]);
 
     case 'logout':
         logout_user();
-        json_ok(['redirect' => 'login.php']);
+        json_ok(['redirect' => 'login']);
 }
 
 fail('Unknown action.', 404);

@@ -5,10 +5,10 @@ require __DIR__ . '/../includes/bootstrap.php';
 $code = preg_replace('/[^A-Za-z0-9]/', '', (string) ($_GET['code'] ?? ''));
 $user = current_user();
 if (!$user) {
-    redirect('pages/login.php?next=' . urlencode('join.php?code=' . $code));
+    redirect('pages/login?next=' . urlencode('join?code=' . $code));
 }
 if ($user['role'] === 'admin') {
-    redirect('pages/admin-dashboard.php');
+    redirect('pages/admin-dashboard');
 }
 $title = 'Join Bill';
 require __DIR__ . '/../partials/head.php';
@@ -30,7 +30,7 @@ require __DIR__ . '/../partials/head.php';
     <div v-else-if="error" class="py-6 text-center">
       <p class="text-[16px] font-extrabold text-ink">Link not working</p>
       <p class="mt-1 text-[13px] text-slate-500">{{ error }}</p>
-      <a href="dashboard.php" class="btn-pill btn-pill-soft mt-6">Go to dashboard</a>
+      <a href="dashboard" class="btn-pill btn-pill-soft mt-6">Go to dashboard</a>
     </div>
 
     <template v-else>
@@ -57,7 +57,7 @@ require __DIR__ . '/../partials/head.php';
       <div class="mt-6">
         <button v-if="isMember" @click="go" class="btn-pill btn-pill-primary">You're already in — open bill</button>
         <button v-else-if="!bill.locked" @click="join" class="btn-pill btn-pill-primary" :disabled="busy">{{ busy ? 'Joining…' : 'Join as <?= h(first_name($user['full_name'])) ?>' }}</button>
-        <a href="dashboard.php" class="btn-pill btn-pill-soft mt-3">Not now</a>
+        <a href="dashboard" class="btn-pill btn-pill-soft mt-3">Not now</a>
       </div>
     </template>
   </div>
@@ -82,7 +82,7 @@ Setlo.mount({
     }
   },
   methods: {
-    go() { location.href = 'bill-items.php?bill=' + this.bill.id; },
+    go() { location.href = 'bill-items?bill=' + this.bill.id; },
     async join() {
       const r = await Setlo.run(this, () => api.post('bills.php', { action: 'join', code: this.code }));
       if (r) location.href = r.redirect;

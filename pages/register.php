@@ -3,7 +3,7 @@ require __DIR__ . '/../includes/bootstrap.php';
 require __DIR__ . '/../includes/google.php';
 $next = safe_next((string) ($_GET['next'] ?? ''));
 if (current_user()) {
-    redirect($next ? 'pages/' . $next : 'index.php');
+    redirect($next ? 'pages/' . $next : '');
 }
 $title = 'Create Account';
 $bodyClass = 'landing-body';
@@ -76,7 +76,7 @@ require __DIR__ . '/../partials/auth-landing-top.php';
   </form>
 
   <p class="mt-6 text-center text-[14px] text-slate-600">
-    Already have an account? <a href="login.php<?= $next ? '?next=' . h(urlencode($next)) : '' ?>" class="font-bold text-brand-700 hover:underline">Log in</a>
+    Already have an account? <a href="login<?= $next ? '?next=' . h(urlencode($next)) : '' ?>" class="font-bold text-brand-700 hover:underline">Log in</a>
   </p>
 </div>
 

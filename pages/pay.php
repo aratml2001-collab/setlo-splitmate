@@ -5,10 +5,10 @@ require __DIR__ . '/../includes/bootstrap.php';
 $code = preg_replace('/[^A-Za-z0-9]/', '', (string) ($_GET['u'] ?? ''));
 $user = current_user();
 if (!$user) {
-    redirect('pages/login.php?next=' . urlencode('pay.php?u=' . $code));
+    redirect('pages/login?next=' . urlencode('pay?u=' . $code));
 }
 if ($user['role'] === 'admin') {
-    redirect('pages/admin-dashboard.php');
+    redirect('pages/admin-dashboard');
 }
 $title = 'Pay';
 $nav = 'settle';
@@ -28,7 +28,7 @@ require __DIR__ . '/../partials/head.php';
   <div v-else-if="error" class="flex-1 px-5 py-10 text-center">
     <p class="text-[16px] font-extrabold text-ink">QR not valid</p>
     <p class="mt-1 text-[13px] text-slate-500">{{ error }}</p>
-    <a href="dashboard.php" class="btn btn-primary mt-5">Go to dashboard</a>
+    <a href="dashboard" class="btn btn-primary mt-5">Go to dashboard</a>
   </div>
 
   <div v-else class="flex-1 space-y-4 px-5 pb-6 pt-5">
@@ -66,11 +66,11 @@ require __DIR__ . '/../partials/head.php';
           <span class="text-[13px] font-bold text-slate-600">Total</span>
           <span class="text-[17px] font-extrabold text-rose-500">{{ peso(oweTotal) }}</span>
         </div>
-        <a href="my-settlements.php" class="btn btn-primary mt-4 w-full">Mark as paid in My Settlements</a>
+        <a href="my-settlements" class="btn btn-primary mt-4 w-full">Mark as paid in My Settlements</a>
       </template>
     </div>
 
-    <a v-if="isMe" href="profile.php" class="btn btn-outline w-full">Back to my profile</a>
+    <a v-if="isMe" href="profile" class="btn btn-outline w-full">Back to my profile</a>
   </div>
 
   <?php require __DIR__ . '/../partials/nav.php'; ?>
