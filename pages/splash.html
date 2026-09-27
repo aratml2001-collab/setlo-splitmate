@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Setlo — Welcome</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../assets/style.css" />
+</head>
+<body class="auth text-slate-800">
+<div class="device flex flex-col" style="background:#fff;">
+  <div class="island"></div>
+
+  <!-- Teal hero -->
+  <div class="auth-hero flex-1 flex flex-col items-center pt-14 sm:pt-16 pb-16 px-6" style="min-height:400px;">
+    <div class="relative z-10 flex items-center gap-2.5 text-white">
+      <span class="brand-mark">₱</span>
+      <span class="text-[28px] font-extrabold tracking-tight">setlo</span>
+    </div>
+
+    <!-- Tilted receipt card -->
+    <div class="relative z-10 mt-8 w-full max-w-[236px] sm:max-w-[240px]" style="transform:rotate(-4deg);">
+      <div class="absolute -top-4 -right-6 flex items-center gap-1.5 bg-white rounded-full pl-1.5 pr-3 py-1.5 shadow-lg text-[12px] font-bold text-slate-900 z-10">
+        <span class="w-5 h-5 rounded-full bg-teal-500 flex items-center justify-center">
+          <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+        </span>
+        Miguel paid
+      </div>
+
+      <div class="bg-white rounded-2xl shadow-2xl shadow-teal-900/30 px-4 pt-4 pb-4">
+        <p class="font-extrabold text-[15px] text-slate-900">Dinner at Manam</p>
+        <p class="text-[11px] text-slate-400 mt-0.5">Tonight · 4 people</p>
+
+        <div class="mt-3 text-[12.5px] text-slate-700">
+          <div class="flex justify-between py-2 border-b border-dashed border-slate-200"><span>Sinigang ×2</span><span class="font-bold text-slate-900">₱640</span></div>
+          <div class="flex justify-between py-2 border-b border-dashed border-slate-200"><span>Kare-kare</span><span class="font-bold text-slate-900">₱820</span></div>
+          <div class="flex justify-between py-2"><span>Halo-halo ×4</span><span class="font-bold text-slate-900">₱1,020</span></div>
+        </div>
+
+        <div class="flex items-center justify-between mt-2">
+          <div class="flex -space-x-2">
+            <span class="avatar w-6 h-6 ring-2 ring-white text-[9px]" style="background:#0d9488;">MI</span>
+            <span class="avatar w-6 h-6 ring-2 ring-white text-[9px]" style="background:#f43f5e;">AN</span>
+            <span class="avatar w-6 h-6 ring-2 ring-white text-[9px]" style="background:#f59e0b;">JO</span>
+            <span class="avatar w-6 h-6 ring-2 ring-white text-[9px]" style="background:#818cf8;">KA</span>
+          </div>
+          <span class="text-[13px] font-extrabold text-teal-700">₱620 each</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- White sheet -->
+  <div class="auth-sheet px-6 pt-8 pb-5 text-center">
+    <h1 class="text-[24px] leading-tight font-extrabold text-slate-900 tracking-tight">
+      Split bills.<br /><span class="text-teal-600">Stay friends.</span>
+    </h1>
+    <p class="text-[13px] text-slate-500 mt-2.5">Scan the receipt, split it fair, confirm it's paid.</p>
+
+    <div class="flex justify-center gap-2 mt-4">
+      <span class="chip">Scan</span>
+      <span class="chip">Split</span>
+      <span class="chip">Settle</span>
+    </div>
+
+    <div class="space-y-3 mt-6">
+      <a href="login.html" class="btn-pill btn-pill-primary">Sign In</a>
+      <a href="register.html" class="btn-pill btn-pill-outline">Create Account</a>
+    </div>
+    <div class="home-bar mt-6"></div>
+  </div>
+</div>
+</body>
+</html>

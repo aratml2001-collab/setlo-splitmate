@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Setlo — Bill Breakdown</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="../assets/style.css" />
+</head>
+<body class="text-slate-800">
+<div class="device flex flex-col">
+
+  <div class="app-bar px-5 pt-6 pb-4">
+    <div class="flex items-center gap-3">
+      <a href="bill-history.html" class="w-8 h-8 rounded-full bg-white/15 flex items-center justify-center">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+      </a>
+      <div class="flex-1">
+        <h1 class="text-lg font-bold leading-tight">Jollibee Merienda Run</h1>
+        <p class="text-teal-100 text-xs">Closed · Sep 3, 2026</p>
+      </div>
+      <span class="badge badge-closed">Closed</span>
+    </div>
+  </div>
+
+  <div class="flex-1 px-5 py-4 overflow-y-auto space-y-5">
+
+    <p class="text-xs font-semibold text-slate-500">ITEMIZED RECEIPT</p>
+    <div class="card divide-y divide-slate-100">
+      <div class="p-3.5 flex justify-between items-center">
+        <div><p class="text-sm font-medium">Jollibee Chickenjoy 2pc ×2</p><p class="text-xs text-slate-400">Assigned to: Miguel, Ana</p></div>
+        <p class="text-sm font-semibold">₱258.00</p>
+      </div>
+      <div class="p-3.5 flex justify-between items-center">
+        <div><p class="text-sm font-medium">Jolly Spaghetti ×1</p><p class="text-xs text-slate-400">Assigned to: Chris</p></div>
+        <p class="text-sm font-semibold">₱69.00</p>
+      </div>
+      <div class="p-3.5 flex justify-between items-center">
+        <div><p class="text-sm font-medium">Peach Mango Pie ×3</p><p class="text-xs text-slate-400">Assigned to: Miguel, Ana, Chris</p></div>
+        <p class="text-sm font-semibold">₱87.00</p>
+      </div>
+      <div class="p-3.5 flex justify-between items-center">
+        <div><p class="text-sm font-medium">Coke Float ×3</p><p class="text-xs text-slate-400">Split equally</p></div>
+        <p class="text-sm font-semibold">₱141.00</p>
+      </div>
+    </div>
+
+    <p class="text-xs font-semibold text-slate-500">PER-MEMBER SHARE</p>
+    <div class="card divide-y divide-slate-100">
+      <div class="p-3.5 flex items-center gap-3">
+        <div class="avatar w-8 h-8 bg-teal-600">MS</div>
+        <p class="flex-1 text-sm font-medium">Miguel Santos (Creator)</p>
+        <p class="text-sm font-bold">₱195.00</p>
+      </div>
+      <div class="p-3.5 flex items-center gap-3">
+        <div class="avatar w-8 h-8 bg-emerald-500">AN</div>
+        <p class="flex-1 text-sm font-medium">Ana</p>
+        <p class="text-sm font-bold">₱165.00</p>
+      </div>
+      <div class="p-3.5 flex items-center gap-3">
+        <div class="avatar w-8 h-8 bg-amber-500">CH</div>
+        <p class="flex-1 text-sm font-medium">Chris</p>
+        <p class="text-sm font-bold">₱125.00</p>
+      </div>
+    </div>
+
+    <p class="text-xs font-semibold text-slate-500">SETTLEMENT HISTORY</p>
+    <div class="card divide-y divide-slate-100">
+      <div class="p-3.5 flex justify-between items-center">
+        <div><p class="text-sm font-medium">Ana → Miguel</p><p class="text-xs text-slate-400">Confirmed Sep 4, 9:12 AM</p></div>
+        <span class="badge badge-settled">Settled</span>
+      </div>
+      <div class="p-3.5 flex justify-between items-center">
+        <div><p class="text-sm font-medium">Chris → Miguel</p><p class="text-xs text-slate-400">Confirmed Sep 4, 11:40 AM</p></div>
+        <span class="badge badge-settled">Settled</span>
+      </div>
+    </div>
+
+    <a href="settlement-audit.html" class="text-xs font-semibold text-teal-600 block text-center">View Full Audit Trail →</a>
+
+    <div class="card p-3.5 bg-slate-50">
+      <div class="flex justify-between text-sm font-bold"><span>Receipt Total</span><span class="text-teal-700">₱485.00</span></div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

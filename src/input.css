@@ -1,0 +1,262 @@
+/* Setlo design system — compiled by tools/build-css.cmd into assets/css/app.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html, body { @apply bg-canvas text-slate-800 font-sans antialiased; }
+  [v-cloak] { display: none !important; }
+}
+
+@layer components {
+  /* ---------- App shell ----------
+     Phones/tablets (<1024px): one full-bleed column with the bottom tab bar.
+     Laptops/desktops (lg): fixed left sidebar (.nav2) and a centered content column.
+     .auth-layout (sign-in pages) becomes a split screen on lg instead. */
+  .device { @apply relative mx-auto flex min-h-screen w-full max-w-[640px] flex-col bg-canvas; }
+  .device-white { @apply bg-white; }
+  @media (min-width: 1024px) {
+    .device:not(.auth-layout) { max-width: none; padding-left: 15rem; padding-bottom: 1.5rem; }
+    .device:not(.auth-layout) > :not(.nav2):not(.sheet-backdrop):not(.fixed) {
+      width: 100%; max-width: 60rem; margin-left: auto; margin-right: auto;
+    }
+    .device.device-narrow > :not(.nav2):not(.sheet-backdrop):not(.fixed) { max-width: 42rem; }
+    .device:not(.auth-layout) > .app-hero { margin-top: 1.5rem; border-radius: 1.5rem; }
+    .device:not(.auth-layout) > .steps { border-radius: 1rem; margin-top: .75rem; border: 1px solid #e8eeee; }
+
+    /* Split-screen sign-in: brand panel left, form right. */
+    .auth-layout { max-width: none; flex-direction: row; }
+    .auth-layout > .auth-hero {
+      width: 50%; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 4rem 4.5rem;
+    }
+    .auth-layout > .auth-sheet {
+      width: 50%; margin-top: 0; border-radius: 0; justify-content: center; padding: 3rem 2rem;
+      display: flex; flex-direction: column;
+    }
+    .auth-layout > .auth-sheet > * { width: 100%; max-width: 28rem; margin-left: auto; margin-right: auto; }
+    .auth-layout > .auth-sheet > .flex-1 { flex: 0 0 1.5rem; min-height: 0; }
+  }
+
+  /* ---------- Heroes & sheets ---------- */
+  .auth-hero, .app-hero { @apply relative overflow-hidden text-white; }
+  .auth-hero { background: linear-gradient(180deg, #2dd4bf 0%, #14b8a6 45%, #0f8a7e 100%); }
+  .app-hero  { background: linear-gradient(160deg, #1fbfae 0%, #12a595 50%, #0f8a7e 100%); }
+  .auth-hero::before, .auth-hero::after, .app-hero::before {
+    content: ""; @apply pointer-events-none absolute rounded-full bg-white/[.07];
+  }
+  .auth-hero::before { @apply -right-[90px] -top-[70px] h-[260px] w-[260px]; }
+  .auth-hero::after  { @apply -bottom-[150px] -left-[110px] h-[300px] w-[300px]; }
+  .app-hero::before  { @apply -right-[70px] -top-[90px] h-[240px] w-[240px]; }
+  .auth-hero > *, .app-hero > * { @apply relative z-[1]; }
+  .auth-sheet { @apply relative z-[1] -mt-8 rounded-t-[32px] bg-white; }
+
+  .brand-mark { @apply inline-flex h-[34px] w-[34px] items-center justify-center rounded-[10px] border border-white/35 bg-white/[.22] text-base font-extrabold text-white; }
+  .glass-btn { @apply relative inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/[.18] text-[.8rem] font-extrabold text-white transition-colors hover:bg-white/[.28]; }
+
+  /* ---------- Buttons ---------- */
+  .btn-pill { @apply flex h-[50px] w-full items-center justify-center gap-2 rounded-2xl text-[.95rem] font-bold transition active:translate-y-px disabled:cursor-not-allowed disabled:opacity-60; }
+  .btn-pill-primary { @apply bg-gradient-to-b from-brand-500 to-brand-600 text-white shadow-[0_10px_20px_-8px_rgb(13_148_136/.6)] hover:from-brand-600 hover:to-brand-700; }
+  .btn-pill-outline { @apply border-[1.5px] border-[#99e6da] bg-white text-brand-700 hover:bg-brand-50; }
+  .btn-pill-soft    { @apply border-[1.5px] border-slate-200 bg-white text-ink hover:bg-slate-50; }
+  .btn-pill-danger  { @apply border-[1.5px] border-rose-300 bg-white text-rose-600 hover:bg-rose-50; }
+
+  .btn { @apply inline-flex items-center justify-center gap-1.5 rounded-xl px-4 py-2.5 text-sm font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-50; }
+  .btn-sm { @apply rounded-lg px-3.5 py-1.5 text-xs; }
+  .btn-primary { @apply bg-brand-600 text-white hover:bg-brand-700; }
+  .btn-accent  { @apply bg-accent-500 text-white hover:bg-accent-600; }
+  .btn-outline { @apply border-[1.5px] border-brand-600 bg-white text-brand-700 hover:bg-brand-50; }
+  .btn-ghost   { @apply bg-transparent text-slate-600 hover:bg-slate-100; }
+  .btn-danger  { @apply border-[1.5px] border-red-600 bg-white text-red-600 hover:bg-red-50; }
+
+  .fab2 { @apply flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-b from-brand-500 to-brand-600 text-white shadow-[0_12px_24px_-8px_rgb(13_148_136/.7)]; }
+
+  /* ---------- Forms ---------- */
+  .field-label { @apply mb-[.45rem] block text-[.82rem] font-bold text-ink; }
+  .input-soft {
+    @apply h-12 w-full rounded-[14px] border-[1.5px] border-transparent bg-[#f1f5f5] px-4 text-sm text-ink transition placeholder:text-slate-400;
+    @apply focus:border-brand-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-brand-500/[.12];
+  }
+  textarea.input-soft { @apply h-auto py-3; }
+  .input-wrap { @apply relative; }
+  .input-wrap .input-soft.has-lead  { @apply pl-[2.6rem]; }
+  .input-wrap .input-soft.has-trail { @apply pr-[2.8rem]; }
+  .input-lead { @apply pointer-events-none absolute left-[.95rem] top-1/2 -translate-y-1/2 text-slate-600; }
+  .input-icon { @apply absolute right-4 top-1/2 -translate-y-1/2 text-slate-600; }
+  .field-error { @apply mt-1.5 text-[12px] font-semibold text-rose-500; }
+
+  .input { @apply w-full rounded-[.65rem] border-[1.5px] border-slate-200 bg-white px-3 py-2.5 text-sm focus:border-brand-500 focus:outline-none; }
+
+  /* Review-items editable row */
+  .row-in { @apply h-11 min-w-0 rounded-xl border-[1.5px] border-slate-200 bg-white px-3 text-sm text-ink focus:border-brand-500 focus:outline-none focus:ring-[3px] focus:ring-brand-500/[.12]; }
+  .row-qty { @apply w-10 border-rose-200 bg-rose-50 p-0 text-center font-bold text-rose-600; }
+  .flagged { @apply !border-amber-300 !bg-amber-50; }
+  .flagged .row-in:not(.row-qty) { @apply border-amber-300; }
+
+  /* ---------- Cards & lists ---------- */
+  .tile { @apply rounded-[18px] border border-[#e8eeee] bg-white shadow-[0_1px_2px_rgb(15_23_42/.03)]; }
+  a.tile:hover, button.tile:hover { @apply border-[#c9ece6]; }
+  .tile-muted { @apply bg-[#f8fafa] shadow-none; }
+  .card { @apply rounded-[.85rem] border border-slate-200 bg-white; }
+
+  .initials { @apply flex h-11 w-11 shrink-0 items-center justify-center rounded-[14px] bg-[#e6f7f4] text-[.85rem] font-extrabold text-brand-700; }
+  .initials-muted { @apply bg-[#eef1f3] text-slate-400; }
+  .av { @apply inline-flex shrink-0 items-center justify-center rounded-full font-extrabold text-white shadow-[0_0_0_2px_#fff]; }
+
+  .progress { @apply h-[5px] overflow-hidden rounded-full bg-slate-200; }
+  .progress > span { @apply block h-full rounded-full bg-brand-500 transition-[width] duration-500; }
+  .progress-muted > span { @apply bg-[#b6c0cc]; }
+
+  .section-label { @apply mb-2.5 text-[11px] font-extrabold tracking-[.08em] text-slate-500; }
+
+  /* ---------- Status pills (bill + settlement states) ---------- */
+  .pill { @apply inline-flex items-center whitespace-nowrap rounded-full px-[.6rem] py-[.22rem] text-[.7rem] font-bold; }
+  .pill-draft      { @apply bg-slate-100 text-slate-600; }
+  .pill-active     { @apply bg-[#d5f5ef] text-brand-700; }
+  .pill-settling   { @apply bg-[#fdf0c4] text-[#92600e]; }
+  .pill-closed     { @apply bg-[#e9edf1] text-[#8391a2]; }
+  .pill-pending    { @apply bg-yellow-100 text-yellow-800; }
+  .pill-awaiting   { @apply bg-blue-100 text-blue-700; }
+  .pill-settled    { @apply bg-green-100 text-green-700; }
+  .pill-disputed   { @apply bg-red-100 text-red-700; }
+  .pill-unassigned { @apply bg-[#fde2e4] text-rose-600; }
+  .pill-suspended  { @apply bg-slate-200 text-slate-600; }
+  .chip { @apply inline-flex items-center rounded-full bg-[#e6f7f4] px-3 py-[.3rem] text-xs font-bold text-brand-700; }
+
+  /* ---------- Segmented control & tabs ---------- */
+  .seg { @apply flex gap-1 rounded-[14px] bg-white/[.16] p-1; }
+  .seg button { @apply h-[34px] flex-1 rounded-[10px] text-[.8rem] font-bold text-[#e6fffb] transition-colors; }
+  .seg button.on { @apply bg-white text-brand-700 shadow-[0_1px_3px_rgb(0_0_0/.08)]; }
+  .seg-light { @apply bg-slate-100; }
+  .seg-light button { @apply text-slate-500; }
+
+  .tab-btn { @apply flex-1 border-b-2 border-transparent py-2 text-[.85rem] font-semibold text-slate-500; }
+  .tab-btn.active { @apply border-brand-600 text-brand-700; }
+
+  .qa-icon { @apply flex h-[52px] w-[52px] items-center justify-center rounded-2xl; }
+
+  /* ---------- Bottom nav ---------- */
+  .nav2 { @apply sticky bottom-0 z-20 grid grid-cols-4 border-t border-[#e8eeee] bg-white pb-3 pt-2.5; }
+  .nav2 a, .nav2 button { @apply flex flex-col items-center gap-1 text-[11px] font-semibold text-[#8391a2]; }
+  .nav2 a.active { @apply font-bold text-brand-600; }
+  @media (min-width: 1024px) {
+    .nav2 {
+      position: fixed; top: 0; bottom: 0; left: 0; width: 15rem; z-index: 30;
+      display: flex; flex-direction: column; gap: .25rem;
+      border-top: 0; border-right: 1px solid #e8eeee; padding: 1.5rem .75rem;
+    }
+    .nav2 a, .nav2 button {
+      flex-direction: row; gap: .75rem; width: 100%; padding: .65rem .9rem; border-radius: .75rem;
+      font-size: .875rem; color: #475569; text-align: left;
+    }
+    .nav2 a:hover, .nav2 button:hover { background: #f1f5f5; }
+    .nav2 a.active { background: #e6f7f4; color: theme('colors.brand.700'); }
+  }
+
+  /* ---------- Step indicator (Scan → Review → Assign) ---------- */
+  .steps { @apply flex items-center gap-2.5 border-b border-[#e8eeee] bg-white px-5 py-3; }
+  .step { @apply flex items-center gap-1.5 whitespace-nowrap text-xs font-semibold text-slate-400; }
+  .step .dot { @apply flex h-[22px] w-[22px] items-center justify-center rounded-full bg-slate-200 text-[11px] font-extrabold text-slate-500; }
+  .step.done, .step.current { @apply text-ink; }
+  .step.current { @apply font-bold; }
+  .step.done .dot, .step.current .dot { @apply bg-brand-600 text-white; }
+  .step-line { @apply h-0.5 flex-1 rounded-sm bg-slate-200; }
+  .step-line.done { @apply bg-brand-500; }
+
+  /* ---------- Dark bottom action dock ---------- */
+  .dock { @apply sticky bottom-[65px] z-20 px-4 pb-3 lg:bottom-4 lg:px-0 lg:pb-0; }
+  .dock-inner { @apply flex items-center justify-between rounded-[20px] bg-ink py-2.5 pl-5 pr-2.5 shadow-[0_18px_30px_-12px_rgb(15_23_42/.45)]; }
+  .dock-btn { @apply h-11 rounded-2xl bg-brand-500 px-5 text-sm font-bold text-white transition hover:bg-brand-400 disabled:opacity-50; }
+
+  /* ---------- Receipt scanner ---------- */
+  .viewfinder { @apply relative overflow-hidden rounded-[26px]; background: radial-gradient(120% 90% at 50% 30%, #13524b 0%, #0b3531 55%, #072523 100%); }
+  .vf-corner { @apply absolute h-[34px] w-[34px] border-0 border-solid border-brand-400; }
+  .vf-corner.tl { @apply left-[26px] top-[26px] rounded-tl-xl border-l-[3px] border-t-[3px]; }
+  .vf-corner.tr { @apply right-[26px] top-[26px] rounded-tr-xl border-r-[3px] border-t-[3px]; }
+  .vf-corner.bl { @apply bottom-[26px] left-[26px] rounded-bl-xl border-b-[3px] border-l-[3px]; }
+  .vf-corner.br { @apply bottom-[26px] right-[26px] rounded-br-xl border-b-[3px] border-r-[3px]; }
+  .vf-line { @apply absolute left-[34px] right-[34px] top-[60px] h-0.5 rounded-sm bg-brand-300 shadow-[0_0_14px_3px_rgb(45_212_191/.55)]; }
+  .vf-line.run { @apply animate-vfscan; }
+  .vf-chip { @apply inline-flex items-center gap-1 rounded-full border border-white/[.12] bg-white/[.12] px-[9px] py-[5px] text-[11px] font-bold text-white backdrop-blur-md; }
+  .paper { @apply rounded-md bg-white shadow-[0_20px_40px_-10px_rgb(0_0_0/.5)]; }
+  .paper-line { @apply h-[5px] rounded-[3px] bg-[#dfe5ea]; }
+  .receipt-photo { background: repeating-linear-gradient(0deg, #fdfdfb, #fdfdfb 26px, #eef0ea 27px); }
+
+  /* ---------- Assign items ---------- */
+  .mchip { @apply inline-flex h-10 items-center gap-2 whitespace-nowrap rounded-full border-[1.5px] border-slate-200 bg-white pl-[5px] pr-3.5 text-[13px] font-bold text-ink transition; }
+  .mchip.on { @apply border-brand-500 bg-[#e6f7f4] text-brand-700; }
+  .cbox { @apply flex h-[26px] w-[26px] shrink-0 items-center justify-center rounded-lg border-2 border-slate-300 transition; }
+  .cbox.on { @apply border-brand-500 bg-brand-500; }
+  .no-scrollbar { scrollbar-width: none; }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+
+  /* ---------- Overlays ---------- */
+  .sheet-backdrop { @apply fixed inset-0 z-50 flex items-end justify-center bg-ink/40 sm:items-center; }
+  .sheet { @apply max-h-[85vh] w-full max-w-[430px] overflow-y-auto rounded-t-[28px] bg-white px-6 pb-6 pt-3 sm:rounded-[28px]; }
+  .sheet-grip { @apply mx-auto mb-4 h-1.5 w-10 rounded-full bg-slate-200 sm:hidden; }
+  .toast { @apply fixed bottom-24 left-1/2 z-[60] -translate-x-1/2 whitespace-nowrap rounded-full px-4 py-2.5 text-xs font-bold text-white shadow-lg lg:bottom-8; }
+
+  /* ---------- Admin desktop panel ---------- */
+  .admin-nav a { @apply flex items-center gap-2.5 rounded-lg px-3 py-2 hover:bg-white/5; }
+  .admin-nav a.active { @apply bg-brand-600 font-semibold text-white hover:bg-brand-600; }
+  .th { @apply px-5 py-3 text-left text-xs font-medium text-slate-400; }
+  .td { @apply px-5 py-3; }
+}
+
+/* ---------- Login / sign-up landing (partials/auth-landing-*.php) ----------
+   Phones: just the card. lg: brand column + card. xl: brand + card + phone mockup. */
+@layer components {
+  .landing-body { @apply bg-[#eef8f6]; }
+  .landing {
+    @apply relative min-h-screen overflow-hidden;
+    background:
+      radial-gradient(60rem 40rem at 85% 110%, rgb(94 234 212 / .35), transparent 60%),
+      radial-gradient(40rem 30rem at 10% -10%, rgb(204 251 241 / .9), transparent 60%),
+      linear-gradient(180deg, #f3fbf9 0%, #e7f6f2 100%);
+  }
+  .landing-blob { @apply pointer-events-none absolute rounded-full; filter: blur(2px); }
+  .landing-grid {
+    @apply relative z-[1] mx-auto grid min-h-screen w-full max-w-[1320px] items-center gap-10 px-4 py-8 sm:px-8;
+    @apply lg:grid-cols-[minmax(0,1fr)_440px] lg:gap-14 xl:grid-cols-[minmax(0,1fr)_460px_minmax(0,1fr)] xl:gap-12;
+  }
+  .landing-card {
+    @apply mx-auto w-full max-w-[460px] rounded-[28px] border border-white bg-white/95 p-6 sm:p-9;
+    box-shadow: 0 40px 80px -40px rgb(15 118 110 / .35), 0 2px 6px rgb(15 23 42 / .04);
+  }
+  .logo-tile {
+    @apply inline-flex shrink-0 items-center justify-center bg-gradient-to-br from-brand-500 to-brand-700 font-extrabold text-white;
+    box-shadow: 0 12px 24px -10px rgb(13 148 136 / .7), inset 0 1px 0 rgb(255 255 255 / .25);
+  }
+  .landing-input { @apply h-[52px] w-full rounded-2xl border-[1.5px] border-transparent bg-[#f1f6f5] pl-12 pr-4 text-[15px] text-ink transition placeholder:text-slate-400 focus:border-brand-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-brand-500/[.12]; }
+  .landing-input-icon { @apply pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-500; }
+  .landing-feature-icon { @apply flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-white/85 text-brand-600 shadow-sm ring-1 ring-brand-100; }
+  .google-btn { @apply flex h-[52px] w-full items-center justify-center gap-3 rounded-2xl border-[1.5px] border-slate-200 bg-white text-[15px] font-semibold text-slate-700 transition hover:bg-slate-50; }
+  .hand { font-family: 'Caveat', cursive; }
+
+  /* Illustrative phone on the right (xl only) */
+  .phone-mock {
+    @apply relative w-[280px] rounded-[44px] bg-ink p-2.5;
+    transform: rotate(9deg);
+    box-shadow: 0 50px 90px -30px rgb(15 23 42 / .45), inset 0 0 0 2px #334155;
+  }
+  .phone-mock-screen { @apply relative overflow-hidden rounded-[36px] bg-white pb-3; }
+  .phone-bubble {
+    @apply absolute flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-brand-600;
+    box-shadow: 0 16px 30px -12px rgb(15 118 110 / .35);
+  }
+}
+
+/* ---------- Validation + SweetAlert2 branding ---------- */
+@layer components {
+  .is-invalid,
+  .input-soft.is-invalid, .row-in.is-invalid, .landing-input.is-invalid, .input.is-invalid {
+    @apply !border-rose-400 !bg-rose-50/60 focus:!ring-rose-400/20;
+  }
+  .field-ok { @apply mt-1.5 text-[12px] font-semibold text-brand-600; }
+  .setlo-swal { font-family: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif !important; border-radius: 24px !important; }
+  .setlo-swal .swal2-title { @apply text-[20px] font-extrabold text-ink; }
+  .setlo-swal .swal2-html-container { @apply text-[14px] text-slate-600; }
+  .setlo-swal .swal2-confirm, .setlo-swal .swal2-cancel, .setlo-swal .swal2-deny { @apply !rounded-xl !px-5 !py-2.5 !text-[14px] !font-bold !shadow-none; }
+  .setlo-swal .swal2-input, .setlo-swal .swal2-textarea { @apply !rounded-xl !border-slate-200 !text-[14px] !shadow-none; }
+  .setlo-swal-toast { font-family: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif !important; border-radius: 16px !important; }
+  .setlo-swal-toast .swal2-title { @apply !text-[13px] !font-semibold !text-slate-700; }
+}

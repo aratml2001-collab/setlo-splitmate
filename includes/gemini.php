@@ -1,0 +1,123 @@
+<?php
+// Minimal Google Gemini client (REST generateContent with structured JSON output).
+// Used for receipt OCR now; reusable for other prompts such as humanizing item names.
+
+declare(strict_types=1);
+
+// Phone photos are resized to this long edge before upload: plenty for receipt text, far fewer bytes.
+const GEMINI_IMAGE_MAX_EDGE = 2000;
+
+class GeminiException extends RuntimeException
+{
+}
+
+function gemini_available(): bool
+{
+    return (string) config('gemini.api_key') !== '' && function_exists('curl_init');
+}
+
+/**
+ * Send prompt parts to Gemini and return the decoded JSON reply, shaped by $schema.
+ * @throws GeminiException with a message that is safe to show to the user
+ */
+function gemini_json(array $parts, array $schema): array
+{
+    if (!gemini_available()) {
+        throw new GeminiException('Receipt scanning is not set up on this server (missing Gemini API key).');
+    }
+    $body = json_encode([
+        'contents'         => [['role' => 'user', 'parts' => $parts]],
+        'generationConfig' => [
+            'temperature'      => 0,
+            'responseMimeType' => 'application/json',
+            'responseSchema'   => $schema,
+        ],
+    ]);
+
+    // Overloaded (503), rate-limited (429) or timed-out calls are retried: next the fallback model, then the main model again.
+    $model = (string) config('gemini.model');
+    $attempts = array_merge([$model], (array) config('gemini.fallback_models'), [$model]);
+    foreach ($attempts as $i => $m) {
+        if ($i > 0) {
+            sleep(1);
+        }
+        [$status, $raw] = gemini_request($m, $body);
+        if ($status === 200 || !in_array($status, [0, 429, 500, 503, 504], true)) {
+            break;
+        }
+        error_log("[setlo] Gemini $m busy (HTTP $status), " . ($i + 1 < count($attempts) ? 'retrying' : 'giving up'));
+    }
+
+    if ($status === 0) {
+        throw new GeminiException("Couldn't reach the scanning service. Check your connection and try again.");
+    }
+    $res = json_decode((string) $raw, true);
+    if ($status !== 200) {
+        error_log("[setlo] Gemini HTTP $status: " . substr((string) $raw, 0, 500));
+        if (in_array($status, [429, 500, 503, 504], true)) {
+            throw new GeminiException('The scanning service is busy right now. Try again in a minute, or enter the items manually.');
+        }
+        if (in_array($status, [400, 401, 403], true) && stripos((string) ($res['error']['message'] ?? ''), 'API key') !== false) {
+            throw new GeminiException('The scanning service rejected the server\'s API key.');
+        }
+        throw new GeminiException('The scanning service had a problem. Try again, or enter the items manually.');
+    }
+
+    $text = $res['candidates'][0]['content']['parts'][0]['text'] ?? null;
+    $data = is_string($text) ? json_decode($text, true) : null;
+    if (!is_array($data)) {
+        error_log('[setlo] Gemini returned no usable JSON: ' . substr((string) $raw, 0, 500));
+        throw new GeminiException("The receipt couldn't be read. Try a clearer photo, or enter the items manually.");
+    }
+    return $data;
+}
+
+/**
+ * One generateContent call. Returns [HTTP status, body]; status 0 means a network error or timeout.
+ */
+function gemini_request(string $model, string $body): array
+{
+    $ch = curl_init('https://generativelanguage.googleapis.com/v1beta/models/' . rawurlencode($model) . ':generateContent');
+    curl_setopt_array($ch, [
+        CURLOPT_POST           => true,
+        CURLOPT_POSTFIELDS     => $body,
+        CURLOPT_HTTPHEADER     => ['Content-Type: application/json', 'x-goog-api-key: ' . config('gemini.api_key')],
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_CONNECTTIMEOUT => 10,
+        CURLOPT_TIMEOUT        => (int) (config('gemini.timeout') ?: 25),
+    ]);
+    $raw = curl_exec($ch);
+    $status = $raw === false ? 0 : (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    if ($raw === false) {
+        error_log("[setlo] Gemini $model request failed: " . curl_error($ch));
+    }
+    curl_close($ch);
+    return [$status, (string) $raw];
+}
+
+/** An inline image part, downscaled (and turned upright) when GD is available. */
+function gemini_image_part(string $path): array
+{
+    $bytes = (string) file_get_contents($path);
+    $info = @getimagesizefromstring($bytes);
+    $mime = $info['mime'] ?? 'image/jpeg';
+
+    if ($info && extension_loaded('gd') && max($info[0], $info[1]) > GEMINI_IMAGE_MAX_EDGE) {
+        $img = @imagecreatefromstring($bytes);
+        if ($img) {
+            // Re-encoding drops EXIF, so apply the camera's orientation first.
+            $orientation = $mime === 'image/jpeg' && function_exists('exif_read_data') ? (int) (@exif_read_data($path)['Orientation'] ?? 1) : 1;
+            $angle = [3 => 180, 6 => -90, 8 => 90][$orientation] ?? 0;
+            if ($angle) {
+                $img = imagerotate($img, $angle, 0);
+            }
+            $scale = GEMINI_IMAGE_MAX_EDGE / max(imagesx($img), imagesy($img));
+            $img = imagescale($img, (int) round(imagesx($img) * $scale), (int) round(imagesy($img) * $scale));
+            ob_start();
+            imagejpeg($img, null, 85);
+            $bytes = (string) ob_get_clean();
+            $mime = 'image/jpeg';
+        }
+    }
+    return ['inline_data' => ['mime_type' => $mime, 'data' => base64_encode($bytes)]];
+}

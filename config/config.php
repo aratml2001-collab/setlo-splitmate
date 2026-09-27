@@ -1,0 +1,54 @@
+<?php
+// Setlo configuration. Defaults match a stock XAMPP install; on a server, set the environment
+// variables instead (e.g. `SetEnv GEMINI_API_KEY ...` in the Apache vhost) so secrets stay out of the code.
+
+$env = fn (string $name, string $default) => getenv($name) !== false ? getenv($name) : $default;
+
+// URL path of this project folder under Apache's document root (e.g. "/SplitMate", or "" at the domain root),
+// so renaming or moving the folder doesn't break CSS/JS paths and redirects.
+$detectBase = function (): string {
+    $root = realpath($_SERVER['DOCUMENT_ROOT'] ?? '') ?: '';
+    $app = realpath(__DIR__ . '/..') ?: '';
+    if ($root === '' || stripos($app, $root) !== 0) {
+        return '/SplitMate'; // command line (setup/migrate scripts) or an unusual server layout
+    }
+    return rtrim(str_replace('\\', '/', substr($app, strlen($root))), '/');
+};
+
+return [
+    'db' => [
+        'host'    => $env('DB_HOST', '127.0.0.1'),
+        'port'    => (int) $env('DB_PORT', '3306'),
+        'name'    => $env('DB_NAME', 'setlo'),
+        'user'    => $env('DB_USER', 'root'),
+        'pass'    => $env('DB_PASS', ''),
+        'charset' => 'utf8mb4',
+    ],
+
+    // Base URL path of the app (no trailing slash; empty when served from the domain root).
+    // Detected automatically; set APP_BASE_URL on a server to override.
+    'base_url' => $env('APP_BASE_URL', $detectBase()),
+
+    'uploads' => [
+        'dir'          => __DIR__ . '/../uploads',   // receipts/, qr/ and proofs/ are created inside
+        'max_bytes'    => 8 * 1024 * 1024,
+    ],
+
+    // Receipt OCR via Google Gemini. Get a free API key at https://aistudio.google.com/apikey.
+    // Leave the key empty to skip OCR and go straight to manual entry.
+    'gemini' => [
+        'api_key' => $env('GEMINI_API_KEY', ''),
+        'model'   => $env('GEMINI_MODEL', 'gemini-flash-latest'),
+        // Tried when the main model is overloaded (HTTP 503) or rate-limited; lighter and usually less busy.
+        'fallback_models' => ['gemini-flash-lite-latest', 'gemini-3.5-flash-lite'],
+        'timeout' => 25,   // seconds per attempt; a busy model can otherwise hang for over a minute
+    ],
+
+    // "Continue with Google": an OAuth 2.0 Web client ID from https://console.cloud.google.com/apis/credentials
+    // (add http://localhost and your site's address under "Authorized JavaScript origins"). Empty = button explains it's not set up.
+    'google' => [
+        'client_id' => $env('GOOGLE_CLIENT_ID', ''),
+    ],
+
+    'timezone' => 'Asia/Manila',
+];

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Setlo — My Bills</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../assets/style.css" />
+</head>
+<body class="app text-slate-800">
+<div class="device app-body flex flex-col">
+  <div class="island"></div>
+
+  <!-- Header -->
+  <div class="app-hero px-5 pt-14 sm:pt-16 pb-5">
+    <div class="flex items-center gap-3">
+      <a href="dashboard.html" class="glass-btn" aria-label="Back">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+      </a>
+      <h1 class="text-[21px] font-extrabold tracking-tight">My Bills</h1>
+    </div>
+    <div class="seg mt-5">
+      <button data-filter="all" class="on" onclick="filterBills('all')">All</button>
+      <button data-filter="active" onclick="filterBills('active')">Active</button>
+      <button data-filter="settling" onclick="filterBills('settling')">Settling</button>
+      <button data-filter="closed" onclick="filterBills('closed')">Closed</button>
+    </div>
+  </div>
+
+  <!-- List -->
+  <div class="flex-1 px-5 pt-4 pb-6">
+    <p id="bill-count" class="text-[12px] font-medium text-slate-500 mb-3">4 bills · ₱5,735.00 total</p>
+
+    <div class="space-y-3">
+      <a href="assign-items.html" data-status="active" data-amount="2150" class="tile p-4 flex items-center gap-3.5">
+        <div class="initials">BF</div>
+        <div class="flex-1 min-w-0">
+          <p class="font-bold text-[14px] text-slate-900 leading-snug">Boodle Fight – Team Lunch</p>
+          <p class="text-[12px] text-slate-400 mt-0.5">6 members · Sep 16</p>
+          <div class="progress mt-2"><span style="width:18%"></span></div>
+        </div>
+        <div class="flex flex-col items-end gap-1.5 shrink-0">
+          <span class="font-extrabold text-[14px] text-slate-900">₱2,150</span>
+          <span class="pill pill-active">Active</span>
+        </div>
+      </a>
+
+      <a href="bill-detail.html" data-status="settling" data-amount="1240" class="tile p-4 flex items-center gap-3.5">
+        <div class="initials">MI</div>
+        <div class="flex-1 min-w-0">
+          <p class="font-bold text-[14px] text-slate-900 leading-snug">Mang Inasal Friday</p>
+          <p class="text-[12px] text-slate-400 mt-0.5">4 members · Sep 12</p>
+          <div class="progress mt-2"><span style="width:62%"></span></div>
+        </div>
+        <div class="flex flex-col items-end gap-1.5 shrink-0">
+          <span class="font-extrabold text-[14px] text-slate-900">₱1,240</span>
+          <span class="pill pill-settling">Settling</span>
+        </div>
+      </a>
+
+      <a href="bill-breakdown.html" data-status="closed" data-amount="485" class="tile tile-muted p-4 flex items-center gap-3.5">
+        <div class="initials initials-muted">JB</div>
+        <div class="flex-1 min-w-0">
+          <p class="font-bold text-[14px] text-slate-500 leading-snug">Jollibee Merienda Run</p>
+          <p class="text-[12px] text-slate-400 mt-0.5">3 members · Sep 3</p>
+          <div class="progress progress-muted mt-2"><span style="width:100%"></span></div>
+        </div>
+        <div class="flex flex-col items-end gap-1.5 shrink-0">
+          <span class="font-extrabold text-[14px] text-slate-500">₱485</span>
+          <span class="pill pill-closed">Closed</span>
+        </div>
+      </a>
+
+      <a href="bill-breakdown.html" data-status="closed" data-amount="1860" class="tile tile-muted p-4 flex items-center gap-3.5">
+        <div class="initials initials-muted">KB</div>
+        <div class="flex-1 min-w-0">
+          <p class="font-bold text-[14px] text-slate-500 leading-snug">Karaoke + Pulutan Night</p>
+          <p class="text-[12px] text-slate-400 mt-0.5">5 members · Aug 28</p>
+          <div class="progress progress-muted mt-2"><span style="width:100%"></span></div>
+        </div>
+        <div class="flex flex-col items-end gap-1.5 shrink-0">
+          <span class="font-extrabold text-[14px] text-slate-500">₱1,860</span>
+          <span class="pill pill-closed">Closed</span>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <!-- Floating create button, pinned above the nav -->
+  <div class="sticky bottom-[78px] h-0 z-30 flex justify-end px-5 pointer-events-none">
+    <button onclick="toggleModal('modal-create-bill')" class="fab2 -translate-y-full pointer-events-auto" aria-label="Create bill">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14m7-7H5"/></svg>
+    </button>
+  </div>
+
+  <!-- Bottom nav -->
+  <nav class="nav2">
+    <a href="dashboard.html">
+      <svg class="w-[22px] h-[22px]" fill="none" stroke="currentColor" stroke-width="1.9" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 11l9-7 9 7M5 9.5V20h5v-5h4v5h5V9.5"/></svg>
+      Dashboard
+    </a>
+    <a href="my-bills.html" class="active">
+      <svg class="w-[22px] h-[22px]" fill="none" stroke="currentColor" stroke-width="1.9" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 3h12v18l-3-2-3 2-3-2-3 2V3zM9 8h6M9 12h6"/></svg>
+      Bills
+    </a>
+    <a href="scan-receipt.html">
+      <svg class="w-[22px] h-[22px]" fill="none" stroke="currentColor" stroke-width="1.9" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 8V6a2 2 0 012-2h2M16 4h2a2 2 0 012 2v2M20 16v2a2 2 0 01-2 2h-2M8 20H6a2 2 0 01-2-2v-2M8 12h8"/></svg>
+      Scan
+    </a>
+    <a href="my-settlements.html">
+      <svg class="w-[22px] h-[22px]" fill="none" stroke="currentColor" stroke-width="1.9" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="14" rx="2.5"/><path stroke-linecap="round" stroke-linejoin="round" d="M16 13h2M3 10h14a2 2 0 012 2"/></svg>
+      Settle
+    </a>
+  </nav>
+</div>
+
+<!-- Create Bill bottom sheet -->
+<div id="modal-create-bill" class="app hidden fixed inset-0 bg-slate-900/40 z-50 flex items-end sm:items-center justify-center">
+  <div class="bg-white w-full max-w-[430px] rounded-t-[28px] sm:rounded-[28px] px-6 pt-3 pb-6 max-h-[85vh] overflow-y-auto">
+    <div class="w-10 h-1.5 rounded-full bg-slate-200 mx-auto mb-4 sm:hidden"></div>
+    <div class="flex items-center justify-between mb-5">
+      <h2 class="font-extrabold text-[18px] text-slate-900">Create Bill</h2>
+      <button onclick="toggleModal('modal-create-bill')" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center" aria-label="Close">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="space-y-4">
+      <div>
+        <label class="field-label">Bill Name</label>
+        <input type="text" class="input-soft" placeholder="e.g. Mang Inasal Friday" />
+      </div>
+      <div>
+        <label class="field-label">Add Members</label>
+        <div class="input-wrap">
+          <svg class="input-lead w-[18px] h-[18px] text-slate-400" fill="none" stroke="currentColor" stroke-width="1.9" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path stroke-linecap="round" d="M20 20l-3.5-3.5"/></svg>
+          <input type="text" class="input-soft has-lead" placeholder="Search by name or email" />
+        </div>
+        <div class="flex flex-wrap gap-2 mt-3">
+          <span class="pill pill-active !text-[12px] !py-1.5 !px-3">You (Creator)</span>
+          <span class="pill bg-slate-100 text-slate-600 !text-[12px] !py-1.5 !px-3">Ana ✕</span>
+          <span class="pill bg-slate-100 text-slate-600 !text-[12px] !py-1.5 !px-3">Chris ✕</span>
+          <span class="pill bg-slate-100 text-slate-600 !text-[12px] !py-1.5 !px-3">Dani ✕</span>
+        </div>
+      </div>
+      <p class="text-[12px] text-slate-400">You'll upload and scan the receipt in the next step.</p>
+      <a href="scan-receipt.html" class="btn-pill btn-pill-primary">Create &amp; Scan Receipt</a>
+    </div>
+  </div>
+</div>
+
+<script src="../assets/app.js"></script>
+<script>
+function filterBills(status) {
+  let count = 0, total = 0;
+  document.querySelectorAll('[data-status]').forEach(function (card) {
+    const show = status === 'all' || card.dataset.status === status;
+    card.style.display = show ? 'flex' : 'none';
+    if (show) { count++; total += Number(card.dataset.amount); }
+  });
+  document.querySelectorAll('[data-filter]').forEach(function (btn) {
+    btn.classList.toggle('on', btn.dataset.filter === status);
+  });
+  document.getElementById('bill-count').textContent =
+    count + (count === 1 ? ' bill' : ' bills') + ' · ₱' + total.toLocaleString('en-PH', { minimumFractionDigits: 2 }) + ' total';
+}
+</script>
+</body>
+</html>

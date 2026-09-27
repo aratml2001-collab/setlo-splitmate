@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Setlo — Bill Items</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../assets/style.css" />
+</head>
+<body class="app text-slate-800">
+<div class="device app-body flex flex-col">
+  <div class="island"></div>
+
+  <!-- Header -->
+  <div class="app-hero px-5 pt-14 sm:pt-16 pb-6">
+    <div class="flex items-center gap-3">
+      <a href="my-bills.html" class="glass-btn" aria-label="Back">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+      </a>
+      <h1 class="text-[20px] font-extrabold tracking-tight">Mang Inasal Friday</h1>
+    </div>
+    <div class="flex items-end justify-between mt-5">
+      <div>
+        <p class="text-[12px] font-medium text-teal-50/90">Total · Sep 12</p>
+        <p class="text-[30px] font-extrabold tracking-tight leading-tight">₱1,240.00</p>
+      </div>
+      <div id="member-stack" class="flex -space-x-2 mb-1.5"></div>
+    </div>
+  </div>
+
+  <!-- Items -->
+  <div class="flex-1 px-5 pt-5 pb-4">
+    <div class="flex items-center justify-between mb-3">
+      <h2 class="font-extrabold text-[15px] text-slate-900">Items</h2>
+      <div class="flex items-center gap-3">
+        <button onclick="toggleRole()" id="role-link" class="text-[11px] font-semibold text-slate-400 hover:text-slate-600">View as member</button>
+        <button onclick="splitEvenly()" id="split-evenly" class="text-[13px] font-bold text-teal-700">Split evenly</button>
+      </div>
+    </div>
+
+    <p id="member-note" class="hidden text-[12px] font-medium text-teal-800 bg-teal-50 border border-teal-100 rounded-xl px-3.5 py-2.5 mb-3">
+      You're viewing as <b>Chris</b> (Bill Member). Only the Bill Creator can change assignments.
+    </p>
+
+    <div id="item-list" class="space-y-3"></div>
+  </div>
+
+  <!-- Your share bar -->
+  <div class="sticky bottom-[65px] z-20 px-4 pb-3">
+    <div class="bg-slate-900 rounded-[20px] pl-5 pr-2.5 py-2.5 flex items-center justify-between shadow-xl shadow-slate-900/20">
+      <div>
+        <p id="share-label" class="text-[11px] font-medium text-slate-400">Your share</p>
+        <p id="share-amount" class="text-[21px] font-extrabold text-white tracking-tight leading-tight">₱310.00</p>
+      </div>
+      <button id="confirm-btn" onclick="confirmSplit()" class="h-11 px-5 rounded-2xl bg-teal-500 hover:bg-teal-400 text-white font-bold text-[14px] transition">Confirm split</button>
+    </div>
+  </div>
+
+  <!-- Bottom nav -->
+  <nav class="nav2">
+    <a href="dashboard.html">
+      <svg class="w-[22px] h-[22px]" fill="none" stroke="currentColor" stroke-width="1.9" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 11l9-7 9 7M5 9.5V20h5v-5h4v5h5V9.5"/></svg>
+      Dashboard
+    </a>
+    <a href="my-bills.html" class="active">
+      <svg class="w-[22px] h-[22px]" fill="none" stroke="currentColor" stroke-width="1.9" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 3h12v18l-3-2-3 2-3-2-3 2V3zM9 8h6M9 12h6"/></svg>
+      Bills
+    </a>
+    <a href="scan-receipt.html">
+      <svg class="w-[22px] h-[22px]" fill="none" stroke="currentColor" stroke-width="1.9" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 8V6a2 2 0 012-2h2M16 4h2a2 2 0 012 2v2M20 16v2a2 2 0 01-2 2h-2M8 20H6a2 2 0 01-2-2v-2M8 12h8"/></svg>
+      Scan
+    </a>
+    <a href="my-settlements.html">
+      <svg class="w-[22px] h-[22px]" fill="none" stroke="currentColor" stroke-width="1.9" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="14" rx="2.5"/><path stroke-linecap="round" stroke-linejoin="round" d="M16 13h2M3 10h14a2 2 0 012 2"/></svg>
+      Settle
+    </a>
+  </nav>
+
+  <!-- Toast -->
+  <div id="toast" class="hidden absolute left-1/2 -translate-x-1/2 bottom-40 z-40 bg-rose-500 text-white text-[12px] font-bold px-4 py-2.5 rounded-full shadow-lg whitespace-nowrap"></div>
+</div>
+
+<!-- Assign sheet -->
+<div id="assign-sheet" class="app hidden fixed inset-0 bg-slate-900/40 z-50 flex items-end sm:items-center justify-center" onclick="if (event.target === this) closeSheet()">
+  <div class="bg-white w-full max-w-[430px] rounded-t-[28px] sm:rounded-[28px] px-6 pt-3 pb-6">
+    <div class="w-10 h-1.5 rounded-full bg-slate-200 mx-auto mb-4 sm:hidden"></div>
+    <p class="text-[12px] font-semibold text-slate-400">Who had this?</p>
+    <div class="flex items-center justify-between mt-0.5 mb-4">
+      <h2 id="sheet-title" class="font-extrabold text-[18px] text-slate-900"></h2>
+      <span id="sheet-price" class="font-extrabold text-[16px] text-slate-900"></span>
+    </div>
+    <div id="sheet-members" class="space-y-2"></div>
+    <p id="sheet-each" class="text-[12px] text-slate-500 text-center mt-4 h-4"></p>
+    <button onclick="saveSheet()" class="btn-pill btn-pill-primary mt-3">Done</button>
+  </div>
+</div>
+
+<script src="../assets/app.js"></script>
+<script>
+const MEMBERS = {
+  MI: { name: 'Miguel (You)', color: '#0f766e' },
+  DA: { name: 'Dani',         color: '#f43f5e' },
+  CH: { name: 'Chris',        color: '#f59e0b' },
+  AN: { name: 'Ana',          color: '#818cf8' },
+};
+const items = [
+  { name: 'Chicken Inasal', qty: 2, price: 380, who: ['MI', 'DA'] },
+  { name: 'Palabok',        qty: 1, price: 150, who: ['CH'] },
+  { name: 'Halo-halo',      qty: 4, price: 360, who: ['MI', 'DA', 'CH'] },
+  { name: 'Extra rice',     qty: 6, price: 350, who: [] },
+];
+let role = 'creator';            // 'creator' (Miguel) or 'member' (Chris)
+let editing = null, draft = [];
+
+const peso = n => '₱' + n.toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const pesoShort = n => '₱' + Math.round(n).toLocaleString('en-PH');
+const av = (id, size) =>
+  `<span class="av" style="background:${MEMBERS[id].color};width:${size}px;height:${size}px;font-size:${size * 0.36}px">${id}</span>`;
+const me = () => role === 'creator' ? 'MI' : 'CH';
+
+function render() {
+  document.getElementById('member-stack').innerHTML = Object.keys(MEMBERS).map(id => av(id, 30)).join('');
+
+  document.getElementById('item-list').innerHTML = items.map((it, i) => {
+    const title = it.name + (it.qty > 1 ? ' ×' + it.qty : '');
+    const clickable = role === 'creator';
+    if (!it.who.length) {
+      return `<button ${clickable ? `onclick="openSheet(${i})"` : 'disabled'} class="w-full text-left rounded-[18px] border-[1.5px] border-dashed border-rose-300 bg-rose-50/70 p-4 flex items-center gap-3">
+        <div class="flex-1 min-w-0">
+          <p class="font-bold text-[14px] text-slate-900">${title}</p>
+          <p class="text-[12px] text-slate-500 mt-0.5">${clickable ? 'Tap to assign' : 'Not yet assigned'}</p>
+        </div>
+        <span class="pill pill-unassigned">Unassigned</span>
+        <span class="font-extrabold text-[15px] text-slate-900 w-14 text-right">${pesoShort(it.price)}</span>
+      </button>`;
+    }
+    const sub = it.qty > 1 ? pesoShort(it.price / it.qty) + ' each' : '1 item';
+    return `<button ${clickable ? `onclick="openSheet(${i})"` : 'disabled'} class="tile w-full text-left p-4 flex items-center gap-3 ${clickable ? '' : 'cursor-default'}">
+      <div class="flex-1 min-w-0">
+        <p class="font-bold text-[14px] text-slate-900">${title}</p>
+        <p class="text-[12px] text-slate-400 mt-0.5">${sub}</p>
+      </div>
+      <div class="flex -space-x-1.5">${it.who.map(id => av(id, 22)).join('')}</div>
+      <span class="font-extrabold text-[15px] text-slate-900 w-14 text-right">${pesoShort(it.price)}</span>
+    </button>`;
+  }).join('');
+
+  const share = items.reduce((sum, it) => sum + (it.who.includes(me()) ? it.price / it.who.length : 0), 0);
+  document.getElementById('share-amount').textContent = peso(share);
+  document.getElementById('share-label').textContent = role === 'creator' ? 'Your share' : 'Your share (Chris)';
+
+  const btn = document.getElementById('confirm-btn');
+  btn.textContent = role === 'creator' ? 'Confirm split' : 'Waiting for creator';
+  btn.disabled = role !== 'creator';
+  btn.classList.toggle('opacity-60', role !== 'creator');
+
+  document.getElementById('split-evenly').classList.toggle('hidden', role !== 'creator');
+  document.getElementById('member-note').classList.toggle('hidden', role === 'creator');
+  document.getElementById('role-link').textContent = role === 'creator' ? 'View as member' : 'View as creator';
+}
+
+function openSheet(i) {
+  editing = i;
+  draft = items[i].who.slice();
+  document.getElementById('sheet-title').textContent = items[i].name + (items[i].qty > 1 ? ' ×' + items[i].qty : '');
+  document.getElementById('sheet-price').textContent = peso(items[i].price);
+  renderSheet();
+  document.getElementById('assign-sheet').classList.remove('hidden');
+}
+function renderSheet() {
+  document.getElementById('sheet-members').innerHTML = Object.keys(MEMBERS).map(id => {
+    const on = draft.includes(id);
+    return `<button onclick="toggleMember('${id}')" class="w-full flex items-center gap-3 px-3.5 h-14 rounded-2xl border-[1.5px] ${on ? 'border-teal-500 bg-teal-50/60' : 'border-slate-200'}">
+      ${av(id, 32)}
+      <span class="flex-1 text-left font-bold text-[14px] text-slate-900">${MEMBERS[id].name}</span>
+      <span class="w-5 h-5 rounded-md flex items-center justify-center ${on ? 'bg-teal-600' : 'border-2 border-slate-300'}">
+        ${on ? '<svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>' : ''}
+      </span>
+    </button>`;
+  }).join('');
+  document.getElementById('sheet-each').textContent =
+    draft.length ? peso(items[editing].price / draft.length) + ' each · split ' + draft.length + ' way' + (draft.length > 1 ? 's' : '') : '';
+}
+function toggleMember(id) {
+  draft = draft.includes(id) ? draft.filter(x => x !== id) : draft.concat(id);
+  renderSheet();
+}
+function saveSheet() { items[editing].who = draft; closeSheet(); render(); }
+function closeSheet() { document.getElementById('assign-sheet').classList.add('hidden'); }
+
+function splitEvenly() {
+  items.forEach(it => { if (!it.who.length) it.who = Object.keys(MEMBERS); });
+  render();
+}
+function toggleRole() { role = role === 'creator' ? 'member' : 'creator'; render(); }
+
+function confirmSplit() {
+  const pending = items.filter(it => !it.who.length);
+  if (pending.length) {
+    const t = document.getElementById('toast');
+    t.textContent = 'Assign ' + pending.length + ' item' + (pending.length > 1 ? 's' : '') + ' before confirming';
+    t.classList.remove('hidden');
+    clearTimeout(t._h);
+    t._h = setTimeout(() => t.classList.add('hidden'), 2200);
+    return;
+  }
+  location.href = 'bill-detail.html';
+}
+
+render();
+</script>
+</body>
+</html>

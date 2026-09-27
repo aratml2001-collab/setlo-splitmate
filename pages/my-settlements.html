@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Setlo — My Settlements</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="../assets/style.css" />
+</head>
+<body class="text-slate-800">
+<div class="device flex flex-col">
+
+  <div class="app-bar px-5 pt-6 pb-4 flex items-center gap-3">
+    <a href="dashboard.html" class="w-8 h-8 rounded-full bg-white/15 flex items-center justify-center">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+    </a>
+    <h1 class="text-lg font-bold">My Settlements</h1>
+  </div>
+
+  <div class="flex border-b border-slate-200 bg-white px-5">
+    <button class="tab-btn active flex-1" id="st-owe" onclick="showSTab('owe')">You Owe</button>
+    <button class="tab-btn flex-1" id="st-owed" onclick="showSTab('owed')">You're Owed</button>
+  </div>
+
+  <div class="flex-1 px-5 py-4 overflow-y-auto space-y-3">
+
+    <!-- YOU OWE -->
+    <div id="sp-owe" class="space-y-3">
+      <div class="card p-3.5">
+        <div class="flex items-center gap-3">
+          <div class="avatar w-9 h-9 bg-amber-500">CH</div>
+          <div class="flex-1">
+            <p class="text-sm font-semibold">Chris</p>
+            <p class="text-xs text-slate-400">Mang Inasal Friday</p>
+          </div>
+          <p class="text-sm font-bold">₱207.50</p>
+        </div>
+        <div class="flex items-center justify-between mt-3">
+          <span class="badge badge-pending">Pending</span>
+          <button onclick="markPaid(this)" class="btn btn-primary !py-1.5 !px-3.5 !text-xs">Mark as Paid</button>
+        </div>
+      </div>
+
+      <div class="card p-3.5">
+        <div class="flex items-center gap-3">
+          <div class="avatar w-9 h-9 bg-sky-500">DA</div>
+          <div class="flex-1">
+            <p class="text-sm font-semibold">Dani</p>
+            <p class="text-xs text-slate-400">Boodle Fight – Team Lunch</p>
+          </div>
+          <p class="text-sm font-bold">₱58.50</p>
+        </div>
+        <div class="flex items-center justify-between mt-3">
+          <span class="badge badge-awaiting">Awaiting Confirmation</span>
+          <span class="text-[11px] text-slate-400">Marked paid Sep 16, 6:40 PM</span>
+        </div>
+      </div>
+
+      <div class="card p-3.5 border-red-200 ring-1 ring-red-100">
+        <div class="flex items-center gap-3">
+          <div class="avatar w-9 h-9 bg-purple-500">JL</div>
+          <div class="flex-1">
+            <p class="text-sm font-semibold">Jella</p>
+            <p class="text-xs text-slate-400">Samgyup Payday Treat</p>
+          </div>
+          <p class="text-sm font-bold">₱780.00</p>
+        </div>
+        <div class="bg-red-50 rounded-lg px-3 py-2 mt-2.5">
+          <p class="text-xs text-red-700"><span class="font-semibold">Disputed by Jella:</span> "Amount doesn't match — I only ordered 1 samgyup set, not 2."</p>
+        </div>
+        <div class="flex items-center justify-between mt-3">
+          <span class="badge badge-disputed">Disputed</span>
+          <button class="btn btn-outline !py-1.5 !px-3.5 !text-xs">Review & Resend</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- YOU'RE OWED -->
+    <div id="sp-owed" class="space-y-3 hidden">
+      <div class="card p-3.5">
+        <div class="flex items-center gap-3">
+          <div class="avatar w-9 h-9 bg-emerald-500">AN</div>
+          <div class="flex-1">
+            <p class="text-sm font-semibold">Ana</p>
+            <p class="text-xs text-slate-400">Mang Inasal Friday</p>
+          </div>
+          <p class="text-sm font-bold">₱230.50</p>
+        </div>
+        <div class="bg-blue-50 rounded-lg px-3 py-2 mt-2.5 flex items-center gap-2">
+          <svg class="w-4 h-4 text-blue-500 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          <p class="text-xs text-blue-700">Ana marked this Paid on Sep 16, 7:02 PM — confirm you received it.</p>
+        </div>
+        <div class="flex items-center justify-between mt-3">
+          <span class="badge badge-awaiting">Awaiting Your Confirmation</span>
+          <div class="flex gap-2">
+            <button onclick="reject(this)" class="btn btn-danger !py-1.5 !px-3 !text-xs">Reject</button>
+            <button onclick="confirmPaid(this)" class="btn btn-accent !py-1.5 !px-3 !text-xs">Confirm</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card p-3.5">
+        <div class="flex items-center gap-3">
+          <div class="avatar w-9 h-9 bg-slate-400">RY</div>
+          <div class="flex-1">
+            <p class="text-sm font-semibold">Rey</p>
+            <p class="text-xs text-slate-400">Boodle Fight – Team Lunch</p>
+          </div>
+          <p class="text-sm font-bold">₱310.00</p>
+        </div>
+        <div class="flex items-center justify-between mt-3">
+          <span class="badge badge-pending">Pending</span>
+          <span class="text-[11px] text-slate-400">Not yet marked paid</span>
+        </div>
+      </div>
+
+      <div class="card p-3.5 opacity-70">
+        <div class="flex items-center gap-3">
+          <div class="avatar w-9 h-9 bg-pink-400">MR</div>
+          <div class="flex-1">
+            <p class="text-sm font-semibold">Mara</p>
+            <p class="text-xs text-slate-400">Karaoke + Pulutan Night</p>
+          </div>
+          <p class="text-sm font-bold">₱349.50</p>
+        </div>
+        <div class="flex items-center justify-between mt-3">
+          <span class="badge badge-settled">Settled</span>
+          <a href="settlement-audit.html" class="text-[11px] font-semibold text-teal-600">View timestamps →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-nav grid grid-cols-4 text-[11px] font-medium py-2">
+    <a href="dashboard.html" class="flex flex-col items-center gap-1 py-1">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l9-9 9 9M5 10v10h14V10"/></svg>
+      Dashboard
+    </a>
+    <a href="my-bills.html" class="flex flex-col items-center gap-1 py-1">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17V7a2 2 0 012-2h6a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V9a2 2 0 012-2h4"/></svg>
+      Bills
+    </a>
+    <a href="scan-receipt.html" class="flex flex-col items-center gap-1 py-1">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.5l1-2h11l1 2H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><circle cx="12" cy="13" r="3.2"/></svg>
+      Scan
+    </a>
+    <a href="my-settlements.html" class="active flex flex-col items-center gap-1 py-1">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a5 5 0 00-10 0v2M5 9h14l1 11H4L5 9z"/></svg>
+      Settle
+    </a>
+  </div>
+</div>
+
+<!-- Reject/dispute modal -->
+<div id="modal-reject" class="hidden fixed inset-0 bg-black/40 z-40 flex items-end sm:items-center justify-center">
+  <div class="bg-white w-full max-w-md rounded-t-2xl sm:rounded-2xl p-5">
+    <h2 class="font-bold text-slate-900 mb-1">Reject this payment?</h2>
+    <p class="text-xs text-slate-500 mb-4">This flags the settlement as Disputed and notifies Ana. Explain why.</p>
+    <textarea class="input h-24" placeholder="e.g. Amount doesn't match what I'm owed..."></textarea>
+    <div class="flex gap-2.5 mt-4">
+      <button onclick="toggleModal('modal-reject')" class="btn btn-ghost flex-1">Cancel</button>
+      <button onclick="toggleModal('modal-reject')" class="btn btn-danger flex-1">Submit Dispute</button>
+    </div>
+  </div>
+</div>
+
+<script src="../assets/app.js"></script>
+<script>
+function showSTab(tab) {
+  document.getElementById('sp-owe').classList.toggle('hidden', tab !== 'owe');
+  document.getElementById('sp-owed').classList.toggle('hidden', tab !== 'owed');
+  document.getElementById('st-owe').classList.toggle('active', tab === 'owe');
+  document.getElementById('st-owed').classList.toggle('active', tab === 'owed');
+}
+function markPaid(btn) {
+  const badge = btn.closest('.card').querySelector('.badge');
+  badge.textContent = 'Awaiting Confirmation';
+  badge.className = 'badge badge-awaiting';
+  btn.outerHTML = '<span class="text-[11px] text-slate-400">Marked paid just now</span>';
+}
+function confirmPaid(btn) {
+  const card = btn.closest('.card');
+  card.querySelector('.badge').textContent = 'Settled';
+  card.querySelector('.badge').className = 'badge badge-settled';
+  card.querySelectorAll('button').forEach(b => b.remove());
+}
+function reject(btn) { toggleModal('modal-reject'); }
+</script>
+</body>
+</html>

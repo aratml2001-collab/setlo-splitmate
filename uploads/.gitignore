@@ -1,0 +1,4 @@
+# Keep uploaded receipts out of git
+*
+!.gitignore
+!.htaccess

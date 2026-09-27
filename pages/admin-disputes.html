@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Setlo Admin — Disputes</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="../assets/style.css" />
+</head>
+<body class="text-slate-800 bg-slate-50">
+<div class="flex min-h-screen">
+
+  <aside class="w-60 shrink-0 bg-slate-900 text-slate-300 flex flex-col">
+    <div class="flex items-center gap-2.5 px-5 py-5 border-b border-white/10">
+      <div class="w-8 h-8 rounded-lg bg-teal-500 flex items-center justify-center text-white font-bold text-sm">S</div>
+      <div><p class="text-white font-bold text-sm leading-tight">Setlo</p><p class="text-[10px] text-slate-400">Admin Panel</p></div>
+    </div>
+    <nav class="flex-1 px-3 py-4 space-y-1 text-sm">
+      <a href="admin-dashboard.html" class="flex items-center gap-2.5 px-3 py-2 rounded-lg hover:bg-white/5">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l9-9 9 9M5 10v10h14V10"/></svg>
+        Overview
+      </a>
+      <a href="admin-users.html" class="flex items-center gap-2.5 px-3 py-2 rounded-lg hover:bg-white/5">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m5-6.13a4 4 0 110 8 4 4 0 010-8z"/></svg>
+        Users
+      </a>
+      <a href="admin-bills.html" class="flex items-center gap-2.5 px-3 py-2 rounded-lg hover:bg-white/5">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17V7a2 2 0 012-2h6a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V9a2 2 0 012-2h4"/></svg>
+        Bills & Settlements
+      </a>
+      <a href="admin-disputes.html" class="flex items-center gap-2.5 px-3 py-2 rounded-lg bg-teal-600 text-white font-semibold">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m0 3.75h.008M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        Disputes
+        <span class="ml-auto bg-white text-red-600 text-[10px] font-bold rounded-full px-1.5 py-0.5">2</span>
+      </a>
+    </nav>
+    <div class="px-3 py-4 border-t border-white/10">
+      <a href="admin-login.html" class="flex items-center gap-2.5 px-3 py-2 rounded-lg hover:bg-white/5 text-sm">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+        Log Out
+      </a>
+    </div>
+  </aside>
+
+  <main class="flex-1 min-w-0">
+    <header class="bg-white border-b border-slate-200 px-8 py-4">
+      <h1 class="text-lg font-bold text-slate-900">Dispute Queue</h1>
+      <p class="text-xs text-slate-400">Setlo's dispute path is intentionally simple: view context, and nudge both sides to resolve outside the app.</p>
+    </header>
+
+    <div class="p-8 space-y-4">
+
+      <div class="card p-5 border-red-200">
+        <div class="flex items-start justify-between">
+          <div class="flex items-center gap-3">
+            <div class="avatar w-9 h-9 bg-purple-500">JL</div>
+            <svg class="w-4 h-4 text-slate-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+            <div class="avatar w-9 h-9 bg-purple-300">MS</div>
+            <div>
+              <p class="text-sm font-semibold">Jella Ramos → Miguel Santos</p>
+              <p class="text-xs text-slate-400">Samgyup Payday Treat · ₱780.00</p>
+            </div>
+          </div>
+          <span class="badge badge-disputed">Disputed</span>
+        </div>
+        <div class="bg-red-50 rounded-lg px-3.5 py-2.5 mt-3">
+          <p class="text-xs text-red-700"><span class="font-semibold">Jella's reason:</span> "Amount doesn't match — I only ordered 1 samgyup set, not 2."</p>
+        </div>
+        <div class="flex items-center justify-between mt-3">
+          <p class="text-[11px] text-slate-400">Marked paid Jul 31, 2026 8:10 AM · Disputed Jul 31, 2026 10:22 AM</p>
+          <div class="flex gap-2">
+            <button class="btn btn-outline !py-1.5 !px-3.5 !text-xs">View Bill</button>
+            <button class="btn btn-ghost !py-1.5 !px-3.5 !text-xs">Message Both</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card p-5 border-red-200">
+        <div class="flex items-start justify-between">
+          <div class="flex items-center gap-3">
+            <div class="avatar w-9 h-9 bg-amber-500">CH</div>
+            <svg class="w-4 h-4 text-slate-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+            <div class="avatar w-9 h-9 bg-teal-600">MS</div>
+            <div>
+              <p class="text-sm font-semibold">Chris Uy → Miguel Santos</p>
+              <p class="text-xs text-slate-400">Mang Inasal Friday · ₱207.50</p>
+            </div>
+          </div>
+          <span class="badge badge-disputed">Disputed</span>
+        </div>
+        <div class="bg-red-50 rounded-lg px-3.5 py-2.5 mt-3">
+          <p class="text-xs text-red-700"><span class="font-semibold">Chris's reason:</span> "Sent via GCash but reference number wasn't attached — receiver hasn't verified yet."</p>
+        </div>
+        <div class="flex items-center justify-between mt-3">
+          <p class="text-[11px] text-slate-400">Marked paid Sep 16, 8:15 PM · Disputed Sep 16, 9:02 PM</p>
+          <div class="flex gap-2">
+            <button class="btn btn-outline !py-1.5 !px-3.5 !text-xs">View Bill</button>
+            <button class="btn btn-ghost !py-1.5 !px-3.5 !text-xs">Message Both</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card p-4 bg-slate-50">
+        <p class="text-xs text-slate-500"><span class="font-semibold text-slate-700">Acknowledged limitation:</span> Setlo does not move funds or auto-resolve disputes — the app manager can only view context and prompt both parties; final resolution happens outside the app.</p>
+      </div>
+    </div>
+  </main>
+</div>
+</body>
+</html>
