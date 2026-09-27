@@ -69,7 +69,6 @@ switch ($action) {
     case 'register':
         $name = str_input('full_name', 100);
         $email = strtolower(str_input('email', 190));
-        $method = str_input('payment_method', 30);
         $password = (string) input('password', '');
         $confirm = (string) input('password_confirm', '');
 
@@ -78,9 +77,6 @@ switch ($action) {
             $errors['email'] = 'Enter a valid email address.';
         } elseif (q('SELECT 1 FROM users WHERE email = ?', [$email])->fetchColumn()) {
             $errors['email'] = 'An account with this email already exists.';
-        }
-        if (!in_array($method, ['GCash', 'Maya', 'Bank Transfer', 'Cash'], true)) {
-            $errors['payment_method'] = 'Choose a payment method.';
         }
         if ($e = valid_password($password)) {
             $errors['password'] = $e;
@@ -96,8 +92,8 @@ switch ($action) {
 
         $palette = ['#0d9488', '#f43f5e', '#f59e0b', '#818cf8', '#0ea5e9', '#a855f7', '#10b981', '#ec4899'];
         q(
-            'INSERT INTO users (full_name, email, password_hash, payment_method, avatar_color, pay_code) VALUES (?, ?, ?, ?, ?, ?)',
-            [trim($name), $email, password_hash($password, PASSWORD_DEFAULT), $method, $palette[array_rand($palette)], new_pay_code()]
+            "INSERT INTO users (full_name, email, password_hash, payment_method, avatar_color, pay_code) VALUES (?, ?, ?, 'GCash', ?, ?)",
+            [trim($name), $email, password_hash($password, PASSWORD_DEFAULT), $palette[array_rand($palette)], new_pay_code()]
         );
         login_user((int) db()->lastInsertId(), true);
         json_ok(['redirect' => 'dashboard.php', 'csrf' => csrf_token()]);

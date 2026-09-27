@@ -42,18 +42,6 @@ require __DIR__ . '/../partials/auth-landing-top.php';
 
     <div>
       <div class="relative">
-        <label for="method" class="sr-only">Preferred payment method</label>
-        <svg width="20" height="20" class="landing-input-icon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="2"/><path stroke-linecap="round" d="M3 10h18M7 15h3"/></svg>
-        <select id="method" v-model="f.payment_method" class="landing-input cursor-pointer appearance-none">
-          <option value="GCash">Get paid via GCash</option><option value="Maya">Get paid via Maya</option>
-          <option value="Bank Transfer">Get paid via Bank Transfer</option><option value="Cash">Get paid in Cash</option>
-        </select>
-        <svg class="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 9l6 6 6-6"/></svg>
-      </div>
-    </div>
-
-    <div>
-      <div class="relative">
         <label for="pw" class="sr-only">Password</label>
         <svg width="20" height="20" class="landing-input-icon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path stroke-linecap="round" d="M8 11V8a4 4 0 018 0v3"/></svg>
         <input id="pw" data-field="password" v-model="f.password" @input="touch('password')" @blur="touch('password')" :class="{ 'is-invalid': err('password') }" maxlength="72" :type="showPw ? 'text' : 'password'" autocomplete="new-password" class="landing-input !pr-12" placeholder="Password (8+ with a letter and a number)" />
@@ -100,7 +88,7 @@ const GOOGLE_CLIENT_ID = <?= json_encode(google_client_id()) ?>;
 Setlo.mount({
   mixins: [Setlo.validation],
   data: () => ({
-    f: { full_name: '', email: '', payment_method: 'GCash', password: '', password_confirm: '', agree: false },
+    f: { full_name: '', email: '', password: '', password_confirm: '', agree: false },
     serverErrors: {}, error: '', showPw: false, busy: false,
   }),
   mounted() {
