@@ -9,21 +9,22 @@ $links = [
 ];
 ?>
 <div class="flex min-h-screen bg-slate-50">
-  <aside class="hidden w-60 shrink-0 flex-col bg-ink text-slate-300 md:flex">
-    <div class="flex items-center gap-2.5 border-b border-white/10 px-5 py-5">
-      <img src="<?= h(url('assets/setlo_logo.png')) ?>" alt="" class="h-9 w-9 rounded-lg object-cover" />
-      <div>
+  <div class="nav-backdrop admin-backdrop" data-nav-close></div>
+  <aside class="admin-aside hidden w-60 shrink-0 flex-col bg-ink text-slate-300 md:flex" aria-label="Admin menu">
+    <div class="admin-brand flex items-center gap-2.5 border-b border-white/10 px-5 py-5">
+      <img src="<?= h(url('assets/setlo_logo.png')) ?>" alt="" class="h-9 w-9 shrink-0 rounded-lg object-cover" />
+      <div class="nav-label">
         <p class="text-sm font-bold leading-tight text-white">Setlo</p>
         <p class="text-[10px] text-slate-400">Admin Panel</p>
       </div>
     </div>
     <nav class="admin-nav flex-1 space-y-1 px-3 py-4 text-sm">
       <?php foreach ($links as $key => [$href, $label, $d]): ?>
-        <a href="<?= $href ?>"<?= $adminNav === $key ? ' class="active"' : '' ?>>
-          <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="<?= $d ?>"/></svg>
-          <?= $label ?>
+        <a href="<?= $href ?>" title="<?= $label ?>"<?= $adminNav === $key ? ' class="active"' : '' ?>>
+          <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="<?= $d ?>"/></svg>
+          <span class="nav-label"><?= $label ?></span>
           <?php if ($key === 'disputes' && $openDisputes): ?>
-            <span class="ml-auto rounded-full bg-red-500 px-1.5 py-0.5 text-[10px] font-bold text-white"><?= $openDisputes ?></span>
+            <span class="admin-badge ml-auto rounded-full bg-red-500 px-1.5 py-0.5 text-[10px] font-bold text-white"><?= $openDisputes ?></span>
           <?php endif; ?>
         </a>
       <?php endforeach; ?>
@@ -31,9 +32,9 @@ $links = [
     <div class="border-t border-white/10 px-3 py-4">
       <form method="post" action="logout.php" class="admin-nav">
         <input type="hidden" name="csrf" value="<?= h(csrf_token()) ?>" />
-        <button class="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-sm hover:bg-white/5">
-          <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
-          Log Out
+        <button class="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-sm hover:bg-white/5" title="Log Out">
+          <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+          <span class="nav-label">Log Out</span>
         </button>
       </form>
     </div>
@@ -41,14 +42,16 @@ $links = [
 
   <main class="min-w-0 flex-1">
     <header class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 bg-white px-5 py-4 md:px-8">
-      <div>
-        <h1 class="text-lg font-bold text-ink"><?= h($title) ?></h1>
-        <p class="text-xs text-slate-400"><?= h($subtitle ?? '') ?></p>
+      <div class="flex min-w-0 items-center gap-3">
+        <button type="button" class="nav-burger h-10 w-10 shrink-0" data-nav-toggle="md" aria-label="Show or hide the menu" title="Show or hide the menu">
+          <svg class="h-[22px] w-[22px]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </button>
+        <div class="min-w-0">
+          <h1 class="text-lg font-bold text-ink"><?= h($title) ?></h1>
+          <p class="text-xs text-slate-400"><?= h($subtitle ?? '') ?></p>
+        </div>
       </div>
       <div class="flex items-center gap-3">
-        <nav class="flex gap-3 text-xs font-semibold text-brand-700 md:hidden">
-          <?php foreach ($links as $key => [$href, $label]): ?><a href="<?= $href ?>"><?= explode(' ', $label)[0] ?></a><?php endforeach; ?>
-        </nav>
         <span class="av h-9 w-9 text-xs" style="background:<?= h($admin['avatar_color']) ?>;box-shadow:none"><?= h(initials($admin['full_name'])) ?></span>
         <div class="hidden text-sm sm:block">
           <p class="font-semibold leading-tight"><?= h($admin['full_name']) ?></p>

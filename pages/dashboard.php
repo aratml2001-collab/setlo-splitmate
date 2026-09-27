@@ -19,7 +19,7 @@ require __DIR__ . '/../partials/head.php';
         <notif-bell></notif-bell>
         <div class="relative">
           <button class="glass-btn" @click="menu = !menu" aria-label="Account menu"><?= h(initials($user['full_name'])) ?></button>
-          <div v-if="menu" class="tile absolute right-0 top-12 z-40 w-56 overflow-hidden text-slate-800 shadow-xl">
+          <div v-if="menu" class="hero-pop tile absolute right-0 top-12 z-40 w-56 overflow-hidden text-slate-800 shadow-xl">
             <div class="border-b border-slate-100 px-4 py-3">
               <p class="text-sm font-bold text-ink"><?= h($user['full_name']) ?></p>
               <p class="text-xs text-slate-400"><?= h($user['email']) ?> · <?= h($user['payment_method']) ?></p>

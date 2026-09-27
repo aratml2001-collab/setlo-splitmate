@@ -44,6 +44,9 @@ header('Cache-Control: no-store');
 <?php endif; ?>
 <?php endforeach; ?>
 <script>
+  // Collapsed sidebar is applied before the first paint (no jump); transitions only after load (no animation on refresh).
+  try { if (localStorage.getItem('setlo-sidebar') === 'collapsed') document.documentElement.classList.add('sb-collapsed'); } catch (e) { /* storage blocked */ }
+  window.addEventListener('load', function () { requestAnimationFrame(function () { document.documentElement.classList.add('sb-anim'); }); });
   // Installable app + offline shell. Browsers only allow this on https:// or localhost.
   // updateViaCache 'none': always check the server for a new sw.js, so fixes reach every browser.
   if ('serviceWorker' in navigator) {

@@ -213,7 +213,7 @@
         <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.9" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.4-1.4A2 2 0 0118 14.2V11a6 6 0 10-12 0v3.2a2 2 0 01-.6 1.4L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
         <span v-if="unread" class="absolute -right-0.5 -top-0.5 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-amber-400 px-1 text-[10px] font-extrabold text-white ring-2 ring-brand-500">{{ unread > 9 ? '9+' : unread }}</span>
       </button>
-      <div v-if="open" class="tile absolute right-0 top-12 z-40 w-80 max-w-[88vw] overflow-hidden text-slate-800 shadow-xl">
+      <div v-if="open" class="hero-pop tile absolute right-0 top-12 z-40 w-80 max-w-[88vw] overflow-hidden text-slate-800 shadow-xl">
         <div class="flex items-center justify-between border-b border-slate-100 px-4 py-3">
           <span class="text-sm font-bold text-ink">Notifications</span>
           <a href="notifications.php" class="text-xs font-bold text-brand-700">See all</a>
@@ -347,6 +347,39 @@
       vm[key] = false;
     }
   }
+
+  // Sidebar burger ([data-nav-toggle="lg|md"]): on screens at least that wide it shrinks the sidebar
+  // to icons (remembered), on smaller ones it opens the slide-in menu. Delegated, so it works in and out of Vue.
+  const root = document.documentElement;
+  const NAV_BREAK = { lg: 1024, md: 768 };
+  const syncBurgers = () => {
+    document.querySelectorAll('[data-nav-toggle]').forEach((b) => {
+      const wide = window.innerWidth >= (NAV_BREAK[b.dataset.navToggle] || 1024);
+      b.setAttribute('aria-expanded', String(wide ? !root.classList.contains('sb-collapsed') : root.classList.contains('nav-open')));
+    });
+  };
+  const closeDrawer = () => { root.classList.remove('nav-open'); syncBurgers(); };
+  document.addEventListener('click', (e) => {
+    const toggle = e.target.closest('[data-nav-toggle]');
+    if (toggle) {
+      const brk = NAV_BREAK[toggle.dataset.navToggle] || 1024;
+      if (window.innerWidth >= brk) {
+        const collapsed = root.classList.toggle('sb-collapsed');
+        try { localStorage.setItem('setlo-sidebar', collapsed ? 'collapsed' : 'open'); } catch (err) { /* storage blocked: this page only */ }
+      } else {
+        root.dataset.navBreak = brk;
+        root.classList.toggle('nav-open');
+      }
+      syncBurgers();
+      return;
+    }
+    if (root.classList.contains('nav-open') && e.target.closest('[data-nav-close], .nav-drawer a, .admin-aside a')) closeDrawer();
+  });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && root.classList.contains('nav-open')) closeDrawer(); });
+  window.addEventListener('resize', () => {
+    if (root.classList.contains('nav-open') && window.innerWidth >= Number(root.dataset.navBreak || 1024)) closeDrawer();
+  });
+  window.addEventListener('load', syncBurgers);
 
   global.Setlo = { mount, run, load, confirm: confirmDialog, alert: alertDialog, promptText, showCopy, escapeHtml, payLink, qrSvg, qrPng, showPayQr, ...helpers };
 })(window);

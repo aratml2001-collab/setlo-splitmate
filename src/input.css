@@ -68,16 +68,26 @@
   }
 
   /* ---------- Heroes & sheets ---------- */
-  .auth-hero, .app-hero { @apply relative overflow-hidden text-white; }
-  .auth-hero { background: linear-gradient(180deg, #2dd4bf 0%, #14b8a6 45%, #0f8a7e 100%); }
-  .app-hero  { background: linear-gradient(160deg, #1fbfae 0%, #12a595 50%, #0f8a7e 100%); }
-  .auth-hero::before, .auth-hero::after, .app-hero::before {
+  .auth-hero {
+    @apply relative overflow-hidden text-white;
+    background: linear-gradient(180deg, #2dd4bf 0%, #14b8a6 45%, #0f8a7e 100%);
+  }
+  /* No overflow-hidden here: the bell / account pop-ups must be able to hang below the header.
+     The decorative circle is a background layer instead, so it needs no clipping. */
+  .app-hero {
+    @apply relative text-white;
+    background:
+      radial-gradient(circle 120px at calc(100% - 50px) 30px, rgb(255 255 255 / .07) 99%, transparent 100%),
+      linear-gradient(160deg, #1fbfae 0%, #12a595 50%, #0f8a7e 100%);
+  }
+  .auth-hero::before, .auth-hero::after {
     content: ""; @apply pointer-events-none absolute rounded-full bg-white/[.07];
   }
   .auth-hero::before { @apply -right-[90px] -top-[70px] h-[260px] w-[260px]; }
   .auth-hero::after  { @apply -bottom-[150px] -left-[110px] h-[300px] w-[300px]; }
-  .app-hero::before  { @apply -right-[70px] -top-[90px] h-[240px] w-[240px]; }
   .auth-hero > *, .app-hero > * { @apply relative z-[1]; }
+  /* While a pop-up (.hero-pop) is open, lift its row above the cards that overlap the header */
+  .app-hero > *:has(.hero-pop) { z-index: 30; }
   .auth-sheet { @apply relative z-[1] -mt-8 rounded-t-[32px] bg-white; }
 
   .brand-mark { @apply inline-flex h-[34px] w-[34px] items-center justify-center rounded-[10px] border border-white/35 bg-white/[.22] text-base font-extrabold text-white; }
@@ -165,14 +175,14 @@
   .qa-icon { @apply flex h-[52px] w-[52px] items-center justify-center rounded-2xl; }
 
   /* ---------- Bottom nav ---------- */
-  .nav2 { @apply sticky bottom-0 z-20 grid grid-cols-4 border-t border-[#e8eeee] bg-white pb-3 pt-2.5; }
+  .nav2 { @apply sticky bottom-0 z-20 grid grid-cols-5 border-t border-[#e8eeee] bg-white pb-3 pt-2.5; }
   .nav2 a, .nav2 button { @apply flex flex-col items-center gap-1 text-[11px] font-semibold text-[#8391a2]; }
   .nav2 a.active { @apply font-bold text-brand-600; }
   @media (min-width: 1024px) {
     .nav2 {
       position: fixed; top: 0; bottom: 0; left: 0; width: 15rem; z-index: 30;
       display: flex; flex-direction: column; gap: .25rem;
-      border-top: 0; border-right: 1px solid #e8eeee; padding: 1.5rem .75rem;
+      border-top: 0; border-right: 1px solid #e8eeee; padding: 1.5rem .75rem; overflow-x: hidden;
     }
     .nav2 a, .nav2 button {
       flex-direction: row; gap: .75rem; width: 100%; padding: .65rem .9rem; border-radius: .75rem;
@@ -180,6 +190,58 @@
     }
     .nav2 a:hover, .nav2 button:hover { background: #f1f5f5; }
     .nav2 a.active { background: #e6f7f4; color: theme('colors.brand.700'); }
+    .nav2 .nav-label { white-space: nowrap; }
+    .nav2-head { display: flex; align-items: center; justify-content: space-between; gap: .5rem; margin-bottom: 1rem; }
+    .nav2 .nav2-logo {
+      width: auto; padding: 0 .4rem; gap: .6rem; font-size: 1.125rem; font-weight: 800; color: theme('colors.ink');
+    }
+    .nav2 .nav2-logo:hover { background: transparent; }
+    .nav2 .nav-burger { width: 2.5rem; height: 2.5rem; padding: 0; justify-content: center; flex-shrink: 0; }
+
+    /* Burger → icon-only strip (state kept in localStorage, applied before the first paint in head.php) */
+    html.sb-collapsed .nav2 { width: 4.75rem; }
+    html.sb-collapsed .device:not(.auth-layout) { padding-left: 4.75rem; }
+    html.sb-collapsed .nav2 .nav-label, html.sb-collapsed .nav2 .nav2-logo { display: none; }
+    html.sb-collapsed .nav2-head { justify-content: center; }
+    html.sb-collapsed .nav2 a, html.sb-collapsed .nav2 button { justify-content: center; padding-left: 0; padding-right: 0; }
+    html.sb-anim .nav2 { transition: width .2s ease; }
+    html.sb-anim .device:not(.auth-layout) { transition: padding-left .2s ease; }
+  }
+  .nav2-head { display: none; }
+  @media (min-width: 1024px) { .nav2-head { display: flex; } }
+  .nav-burger { @apply flex items-center justify-center rounded-xl text-slate-500 hover:bg-[#f1f5f5] hover:text-ink; }
+  .nav2 > button { @apply cursor-pointer; }
+
+  /* ---------- Phones: slide-in menu (burger / "Menu" tab) ---------- */
+  .nav-backdrop { @apply pointer-events-none fixed inset-0 z-[60] bg-ink/40 opacity-0; }
+  .nav-drawer {
+    @apply invisible fixed inset-y-0 left-0 z-[61] flex w-72 max-w-[85vw] -translate-x-full flex-col gap-1 overflow-y-auto bg-white p-4 shadow-2xl;
+  }
+  .nav-drawer > a, .nav-drawer-out { @apply flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-[15px] font-semibold text-slate-600 hover:bg-[#f1f5f5]; }
+  .nav-drawer > a.active { @apply bg-[#e6f7f4] text-brand-700; }
+  .nav-drawer-out { @apply text-rose-600 hover:bg-rose-50; }
+  .nav-drawer .nav-burger { @apply h-9 w-9; }
+  html.nav-open .nav-backdrop { @apply pointer-events-auto opacity-100; }
+  html.nav-open .nav-drawer, html.nav-open .admin-aside { @apply visible translate-x-0; }
+  html.nav-open body { overflow: hidden; }
+  html.sb-anim .nav-backdrop { transition: opacity .2s ease; }
+  html.sb-anim .nav-drawer, html.sb-anim .admin-aside { transition: transform .22s ease, visibility .22s, width .2s ease; }
+  @media (min-width: 1024px) { .nav-backdrop, .nav-drawer { display: none; } }
+
+  /* ---------- Admin sidebar: drawer on phones, icon strip on md+ when collapsed ---------- */
+  @media (max-width: 767.98px) {
+    .admin-aside { @apply invisible fixed inset-y-0 left-0 z-[61] !flex -translate-x-full shadow-2xl; }
+    .admin-backdrop { display: block; }
+  }
+  @media (min-width: 768px) {
+    .admin-backdrop { display: none; }
+    .admin-aside { position: sticky; top: 0; height: 100vh; overflow-x: hidden; }
+    .admin-aside .nav-label { white-space: nowrap; }
+    html.sb-collapsed .admin-aside { width: 4rem; }
+    html.sb-collapsed .admin-aside .nav-label { display: none; }
+    html.sb-collapsed .admin-aside .admin-brand { justify-content: center; padding-left: 0; padding-right: 0; }
+    html.sb-collapsed .admin-aside .admin-nav a, html.sb-collapsed .admin-aside .admin-nav button { justify-content: center; padding-left: 0; padding-right: 0; position: relative; }
+    html.sb-collapsed .admin-aside .admin-badge { position: absolute; top: .3rem; right: .45rem; width: .5rem; height: .5rem; padding: 0; font-size: 0; }
   }
 
   /* ---------- Step indicator (Scan → Review → Assign) ---------- */
