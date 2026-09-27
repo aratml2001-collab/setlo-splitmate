@@ -2,7 +2,6 @@
 // Login / sign-up landing shell (design: assets/login.png). The page prints its card, then includes auth-landing-bottom.php.
 // Phones: card only. lg: brand column + card. xl: brand column + card + phone mockup.
 ?>
-<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&display=swap" rel="stylesheet" />
 <div class="landing">
   <!-- Soft background shapes -->
   <div class="landing-blob -right-40 -top-40 h-[34rem] w-[34rem] bg-brand-100/60" aria-hidden="true"></div>

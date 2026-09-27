@@ -4,6 +4,8 @@
  *   $title      page title (required)
  *   $bodyClass  optional extra classes for <body>
  *   $loginPage  where the API client sends expired sessions (default login.php)
+ *   $headExtra  optional list of extra stylesheets (https:// URLs) and scripts (app paths, e.g. assets/js/x.js),
+ *               loaded here so they are ready before the first paint (no flash)
  */
 // Pages carry the session's CSRF token and personal data: never serve them from a cache.
 header('Cache-Control: no-store');
@@ -32,10 +34,18 @@ header('Cache-Control: no-store');
 <script src="<?= h(url('assets/js/api.js')) ?>?v=<?= @filemtime(__DIR__ . '/../assets/js/api.js') ?>"></script>
 <script src="<?= h(url('assets/js/ui.js')) ?>?v=<?= @filemtime(__DIR__ . '/../assets/js/ui.js') ?>"></script>
 <script src="<?= h(url('assets/js/validate.js')) ?>?v=<?= @filemtime(__DIR__ . '/../assets/js/validate.js') ?>"></script>
+<?php foreach ($headExtra ?? [] as $extra): ?>
+<?php if (str_starts_with($extra, 'https://')): ?>
+<link href="<?= h($extra) ?>" rel="stylesheet" />
+<?php else: ?>
+<script src="<?= h(url($extra)) ?>?v=<?= @filemtime(__DIR__ . '/../' . $extra) ?>"></script>
+<?php endif; ?>
+<?php endforeach; ?>
 <script>
   // Installable app + offline shell. Browsers only allow this on https:// or localhost.
+  // updateViaCache 'none': always check the server for a new sw.js, so fixes reach every browser.
   if ('serviceWorker' in navigator) {
-    window.addEventListener('load', function () { navigator.serviceWorker.register(<?= json_encode(url('sw.js')) ?>).catch(function () {}); });
+    window.addEventListener('load', function () { navigator.serviceWorker.register(<?= json_encode(url('sw.js')) ?>, { updateViaCache: 'none' }).catch(function () {}); });
   }
 </script>
 </head>

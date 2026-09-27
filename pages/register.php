@@ -7,6 +7,7 @@ if (current_user()) {
 }
 $title = 'Create Account';
 $bodyClass = 'landing-body';
+$headExtra = ['https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&display=swap', 'assets/js/google-auth.js'];
 require __DIR__ . '/../partials/head.php';
 require __DIR__ . '/../partials/auth-landing-top.php';
 ?>
@@ -24,7 +25,7 @@ require __DIR__ . '/../partials/auth-landing-top.php';
     <div>
       <div class="relative">
         <label for="name" class="sr-only">Full name</label>
-        <svg class="landing-input-icon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path stroke-linecap="round" d="M4 20c1.5-3.5 4.5-5 8-5s6.5 1.5 8 5"/></svg>
+        <svg width="20" height="20" class="landing-input-icon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path stroke-linecap="round" d="M4 20c1.5-3.5 4.5-5 8-5s6.5 1.5 8 5"/></svg>
         <input id="name" data-field="full_name" v-model="f.full_name" @input="touch('full_name')" @blur="touch('full_name')" :class="{ 'is-invalid': err('full_name') }" autocomplete="name" class="landing-input" placeholder="Full name (e.g. Juan Dela Cruz)" maxlength="100" />
       </div>
       <p v-if="err('full_name')" class="field-error">{{ err('full_name') }}</p>
@@ -33,7 +34,7 @@ require __DIR__ . '/../partials/auth-landing-top.php';
     <div>
       <div class="relative">
         <label for="email" class="sr-only">Email</label>
-        <svg class="landing-input-icon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path stroke-linecap="round" stroke-linejoin="round" d="M3 7l9 6 9-6"/></svg>
+        <svg width="20" height="20" class="landing-input-icon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path stroke-linecap="round" stroke-linejoin="round" d="M3 7l9 6 9-6"/></svg>
         <input id="email" data-field="email" v-model.trim="f.email" @input="touch('email')" @blur="touch('email')" :class="{ 'is-invalid': err('email') }" maxlength="190" type="email" autocomplete="email" class="landing-input" placeholder="you@email.com" />
       </div>
       <p v-if="err('email')" class="field-error">{{ err('email') }}</p>
@@ -42,7 +43,7 @@ require __DIR__ . '/../partials/auth-landing-top.php';
     <div>
       <div class="relative">
         <label for="method" class="sr-only">Preferred payment method</label>
-        <svg class="landing-input-icon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="2"/><path stroke-linecap="round" d="M3 10h18M7 15h3"/></svg>
+        <svg width="20" height="20" class="landing-input-icon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="2"/><path stroke-linecap="round" d="M3 10h18M7 15h3"/></svg>
         <select id="method" v-model="f.payment_method" class="landing-input cursor-pointer appearance-none">
           <option value="GCash">Get paid via GCash</option><option value="Maya">Get paid via Maya</option>
           <option value="Bank Transfer">Get paid via Bank Transfer</option><option value="Cash">Get paid in Cash</option>
@@ -54,10 +55,10 @@ require __DIR__ . '/../partials/auth-landing-top.php';
     <div>
       <div class="relative">
         <label for="pw" class="sr-only">Password</label>
-        <svg class="landing-input-icon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path stroke-linecap="round" d="M8 11V8a4 4 0 018 0v3"/></svg>
+        <svg width="20" height="20" class="landing-input-icon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path stroke-linecap="round" d="M8 11V8a4 4 0 018 0v3"/></svg>
         <input id="pw" data-field="password" v-model="f.password" @input="touch('password')" @blur="touch('password')" :class="{ 'is-invalid': err('password') }" maxlength="72" :type="showPw ? 'text' : 'password'" autocomplete="new-password" class="landing-input !pr-12" placeholder="Password (8+ with a letter and a number)" />
         <button type="button" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-brand-600" :class="{ '!text-brand-600': showPw }" @click="showPw = !showPw" :aria-label="showPw ? 'Hide passwords' : 'Show passwords'">
-          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.04 12.32a1 1 0 010-.64C3.42 7.51 7.36 4.5 12 4.5s8.57 3.01 9.96 7.18a1 1 0 010 .64C20.58 16.49 16.64 19.5 12 19.5s-8.57-3.01-9.96-7.18z"/><circle cx="12" cy="12" r="3"/></svg>
+          <svg width="20" height="20" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.04 12.32a1 1 0 010-.64C3.42 7.51 7.36 4.5 12 4.5s8.57 3.01 9.96 7.18a1 1 0 010 .64C20.58 16.49 16.64 19.5 12 19.5s-8.57-3.01-9.96-7.18z"/><circle cx="12" cy="12" r="3"/></svg>
         </button>
       </div>
       <p v-if="err('password')" class="field-error">{{ err('password') }}</p>
@@ -67,7 +68,7 @@ require __DIR__ . '/../partials/auth-landing-top.php';
     <div>
       <div class="relative">
         <label for="pw2" class="sr-only">Confirm password</label>
-        <svg class="landing-input-icon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path stroke-linecap="round" d="M8 11V8a4 4 0 018 0v3"/></svg>
+        <svg width="20" height="20" class="landing-input-icon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path stroke-linecap="round" d="M8 11V8a4 4 0 018 0v3"/></svg>
         <input id="pw2" data-field="password_confirm" v-model="f.password_confirm" @input="touch('password_confirm')" @blur="touch('password_confirm')" :class="{ 'is-invalid': err('password_confirm') }" maxlength="72" :type="showPw ? 'text' : 'password'" autocomplete="new-password" class="landing-input" placeholder="Confirm password" />
       </div>
       <p v-if="err('password_confirm')" class="field-error">{{ err('password_confirm') }}</p>
@@ -82,7 +83,7 @@ require __DIR__ . '/../partials/auth-landing-top.php';
 
     <button type="submit" class="btn-pill btn-pill-primary !mt-5 !h-[54px]" :disabled="busy">
       {{ busy ? 'Creating account…' : 'Create Account' }}
-      <svg v-if="!busy" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-6-6l6 6-6 6"/></svg>
+      <svg v-if="!busy" width="20" height="20" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-6-6l6 6-6 6"/></svg>
     </button>
   </form>
 
@@ -92,7 +93,6 @@ require __DIR__ . '/../partials/auth-landing-top.php';
 </div>
 
 <?php require __DIR__ . '/../partials/auth-landing-bottom.php'; ?>
-<script src="<?= h(url('assets/js/google-auth.js')) ?>?v=<?= @filemtime(__DIR__ . '/../assets/js/google-auth.js') ?>"></script>
 <script>
 const NEXT = <?= json_encode($next) ?>;
 const GOOGLE_CLIENT_ID = <?= json_encode(google_client_id()) ?>;

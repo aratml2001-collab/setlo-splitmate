@@ -1,6 +1,6 @@
 // Setlo service worker: makes the app installable and keeps the shell usable on a flaky connection.
 // Money data (api/) is never cached — balances must always come from the server.
-const VERSION = 'setlo-v3';
+const VERSION = 'setlo-v4';
 const SHELL = [
   'offline.html',
   'assets/css/app.css',
@@ -38,16 +38,19 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Our static files: serve cached, refresh in the background.
+  // Our static files: network first so a new deploy shows on a normal refresh; the saved copy is only for offline.
   if (url.origin === self.location.origin && url.pathname.includes('/assets/')) {
+    // Key by path only, so each ?v= deploy replaces the old copy instead of piling up.
+    const key = url.origin + url.pathname;
     event.respondWith(
-      caches.open(VERSION).then(async (cache) => {
-        // Key by path only, so each ?v= deploy replaces the old copy instead of piling up.
-        const key = url.origin + url.pathname;
-        const cached = await cache.match(key);
-        const fresh = fetch(req).then((res) => { if (res.ok) cache.put(key, res.clone()); return res; }).catch(() => cached);
-        return cached || fresh;
-      })
+      caches.open(VERSION).then((cache) =>
+        fetch(req)
+          .then((res) => {
+            if (res.ok) { cache.put(key, res.clone()); }
+            return res;
+          })
+          .catch(async () => (await cache.match(key)) || Response.error())
+      )
     );
     return;
   }

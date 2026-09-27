@@ -1,0 +1,9 @@
+# Always re-check the service worker so updates reach browsers on the next normal refresh
+<Files "sw.js">
+  <IfModule mod_headers.c>
+    Header set Cache-Control "no-cache"
+  </IfModule>
+</Files>
+
+# Database backups (tools\backup.cmd) must never be downloadable
+RedirectMatch 403 ^.*/backups/
